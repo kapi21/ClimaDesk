@@ -93,12 +93,17 @@ El APK queda en:
 
 ---
 
-## Roadmap (ideas)
+## Roadmap
 
-- Selector de ciudad con búsqueda (sin diálogo nativo)
-- Icono y `applicationId` definitivos (`ClimaDesk`)
-- Modo “solo reloj” aún más minimalista
-- Ajustes de brillo / arranque automático según dispositivo
+| Prioridad | Qué | Estado |
+|-----------|-----|--------|
+| Hecho | Reloj + clima kiosk, GPS/ciudad, offline, día/noche, mini-pronóstico | ✅ v1.6 |
+| Siguiente | Selector de ciudad con búsqueda (sin `prompt`) | Pendiente |
+| Siguiente | `applicationId` / package definitivo `ClimaDesk` | Pendiente |
+| Luego | Icono propio, modo solo-reloj, autoarranque/brillo kiosk | Ideas |
+| Luego | APK release firmada + tag en GitHub | Ideas |
+
+Estado de desarrollo más detallado: [HANDOFF.md](HANDOFF.md).
 
 ---
 

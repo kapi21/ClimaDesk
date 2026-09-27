@@ -6,6 +6,8 @@ ClimaDesk convierte un smartphone antiguo en un **dashboard de escritorio**: rel
 
 Pensado para dejarlo apoyado en la mesa, cargando, y echarle un vistazo de un golpe de ojo: hora, fecha, temperatura, sensación térmica y un mini-pronóstico.
 
+![ClimaDesk en un móvil en horizontal](docs/climadesk-preview.png)
+
 ---
 
 ## ¿Para qué sirve?

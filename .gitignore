@@ -1,0 +1,33 @@
+# Android / Gradle
+**/.gradle/
+**/build/
+**/local.properties
+**/*.apk
+**/*.ap_
+**/*.dex
+**/*.class
+**/.cxx/
+**/captures/
+*.iml
+.idea/
+*.keystore
+*.jks
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.vscode/
+*.code-workspace
+
+# Large / third-party downloads (keep local only)
+downloads/
+**/MoBro*
+**/YoWindow*
+**/cmdline-tools*
+**/gradle-*-bin.zip
+
+# Node / misc
+node_modules/
+*.log

@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b1020" />
+  <title>ClimaDesk</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --fg: #f4f1ea;
+      --muted: #9aa3b5;
+      --accent: #7eb8ff;
+      --card: rgba(22, 32, 68, 0.72);
+      --line: rgba(126, 184, 255, 0.22);
+      --ui-scale: 100%;
+    }
+    body.day {
+      --bg: #e6eefb;
+      --fg: #16203f;
+      --muted: #4f5f80;
+      --accent: #275dc3;
+      --card: rgba(255, 255, 255, 0.76);
+      --line: rgba(39, 93, 195, 0.22);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(900px 600px at 15% -10%, #1a2750 0%, var(--bg) 55%);
+      color: var(--fg);
+      font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      overflow: hidden;
+      -webkit-user-select: none;
+      user-select: none;
+      touch-action: manipulation;
+      font-size: var(--ui-scale);
+    }
+    body.day {
+      background: radial-gradient(900px 600px at 15% -10%, #bfd4ff 0%, var(--bg) 55%);
+    }
+    .screen {
+      height: 100%;
+      height: 100dvh;
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
+      gap: 0.45rem;
+      padding: 0.65rem 0.8rem 0.55rem;
+    }
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 0.5rem;
+    }
+    .city {
+      font-size: clamp(0.9rem, 3.5vw, 1.1rem);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 700;
+      cursor: pointer;
+      border-bottom: 1px dashed rgba(126, 184, 255, 0.32);
+      min-height: 2.4rem;
+      display: inline-flex;
+      align-items: center;
+      padding: 0.15rem 0.25rem;
+      border-radius: 0.45rem;
+    }
+    .top-right {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+    .updated {
+      font-size: clamp(0.66rem, 2.4vw, 0.8rem);
+      color: var(--muted);
+      white-space: nowrap;
+      min-height: 2.4rem;
+      display: flex;
+      align-items: center;
+    }
+    .refresh {
+      border: 1px solid var(--line);
+      background: var(--card);
+      color: var(--accent);
+      border-radius: 999px;
+      width: 2.6rem;
+      height: 2.6rem;
+      font-size: 1.18rem;
+      line-height: 1;
+      padding: 0;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .refresh:active { opacity: 0.7; }
+    .refresh.busy { animation: spin 0.8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .clock-block { text-align: center; }
+    .date {
+      font-size: clamp(0.8rem, 3vw, 1rem);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.1rem;
+      min-height: 2rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 0.4rem;
+      border-radius: 0.45rem;
+    }
+    .time {
+      font-variant-numeric: tabular-nums;
+      font-weight: 300;
+      font-size: clamp(3.1rem, 17vw, 5.2rem);
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+    }
+    .secs {
+      font-size: 0.34em;
+      color: var(--accent);
+      vertical-align: super;
+      margin-left: 0.12em;
+    }
+    .now {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 0.5rem;
+      align-items: stretch;
+      min-height: 0;
+    }
+    .hero, .stats {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 0.55rem 0.65rem;
+      min-height: 0;
+    }
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 0.12rem;
+    }
+    .icon {
+      font-size: clamp(2.2rem, 11vw, 3.4rem);
+      line-height: 1;
+    }
+    .temp {
+      font-size: clamp(2rem, 10vw, 3.1rem);
+      font-weight: 300;
+      line-height: 1;
+    }
+    .temp span { color: var(--muted); font-size: 0.5em; }
+    .feels, .today {
+      font-size: clamp(0.78rem, 3vw, 0.95rem);
+      color: var(--muted);
+    }
+    .today { color: var(--fg); font-weight: 500; }
+    .sky {
+      font-size: clamp(0.82rem, 3.2vw, 1rem);
+      color: var(--accent);
+      margin-top: 0.1rem;
+    }
+    .mini {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.25rem;
+      margin-top: 0.25rem;
+    }
+    .mini-item {
+      border: 1px solid rgba(154, 163, 181, 0.25);
+      border-radius: 10px;
+      padding: 0.2rem 0.15rem;
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+    .mini-hour { font-size: 0.66rem; }
+    .mini-icon { font-size: 0.9rem; line-height: 1; }
+    .mini-temp { color: var(--fg); font-weight: 600; }
+    .stats {
+      display: grid;
+      grid-template-rows: repeat(4, 1fr);
+      gap: 0.2rem;
+    }
+    .stat {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-bottom: 1px solid rgba(154, 163, 181, 0.15);
+      padding-bottom: 0.12rem;
+      min-height: 0;
+    }
+    .stat:last-child { border-bottom: none; padding-bottom: 0; }
+    .label {
+      font-size: clamp(0.62rem, 2.3vw, 0.74rem);
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .value {
+      font-size: clamp(0.95rem, 3.8vw, 1.2rem);
+      font-weight: 500;
+      font-variant-numeric: tabular-nums;
+    }
+    .err {
+      text-align: center;
+      color: #ff8e8e;
+      font-size: 0.78rem;
+      min-height: 1em;
+    }
+    @media (orientation: landscape) {
+      .screen {
+        grid-template-rows: auto 1fr auto;
+        grid-template-columns: 1.05fr 1fr;
+        grid-template-areas:
+          "top top"
+          "clock now"
+          "err err";
+      }
+      .top { grid-area: top; }
+      .clock-block {
+        grid-area: clock;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      .now { grid-area: now; }
+      .err { grid-area: err; }
+      .time { font-size: clamp(2.8rem, 13vw, 4.6rem); }
+    }
+  </style>
+</head>
+<body>
+  <div class="screen">
+    <div class="top">
+      <div class="city" id="city">Badajoz</div>
+      <div class="top-right">
+        <div class="updated" id="updated">-</div>
+        <button type="button" class="refresh" id="locate" title="Usar ubicacion automatica" aria-label="Usar ubicacion automatica">📍</button>
+        <button type="button" class="refresh" id="refresh" title="Actualizar" aria-label="Actualizar clima">↻</button>
+      </div>
+    </div>
+
+    <div class="clock-block">
+      <div class="date" id="date">-</div>
+      <div class="time" id="time">--:--<span class="secs">--</span></div>
+    </div>
+
+    <div class="now">
+      <div class="hero">
+        <div class="icon" id="icon">☁️</div>
+        <div class="temp" id="temp">--<span>°</span></div>
+        <div class="feels" id="feels">Sensacion --°</div>
+        <div class="today" id="today">Hoy --° / --°</div>
+        <div class="sky" id="sky">...</div>
+        <div class="mini" id="mini">
+          <div class="mini-item">--</div>
+          <div class="mini-item">--</div>
+          <div class="mini-item">--</div>
+          <div class="mini-item">--</div>
+        </div>
+      </div>
+      <div class="stats">
+        <div class="stat">
+          <div class="label">Humedad</div>
+          <div class="value" id="humidity">--%</div>
+        </div>
+        <div class="stat">
+          <div class="label">Prob. ahora</div>
+          <div class="value" id="pop">--%</div>
+        </div>
+        <div class="stat">
+          <div class="label">Prob. max hoy</div>
+          <div class="value" id="popMax">--%</div>
+        </div>
+        <div class="stat">
+          <div class="label">Precipitacion</div>
+          <div class="value" id="precip">-- mm</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="err" id="err"></div>
+  </div>
+
+  <script>
+    const DEFAULT_LOCATION = { lat: 38.8794, lon: -6.9707, place: "Badajoz", source: "manual" };
+    const STORAGE_CITY_KEY = "climadesk_manual_city";
+    const STORAGE_WEATHER_KEY = "climadesk_last_weather";
+    const STORAGE_SCALE_KEY = "climadesk_ui_scale";
+    const REFRESH_MS = 30 * 60 * 1000;
+    let currentLocation = { ...DEFAULT_LOCATION };
+
+    const WMO = {
+      0: ["Despejado", "☀️"], 1: ["Mayormente despejado", "🌤️"], 2: ["Parcialmente nublado", "⛅"], 3: ["Nublado", "☁️"],
+      45: ["Niebla", "🌫️"], 48: ["Niebla helada", "🌫️"], 51: ["Llovizna ligera", "🌦️"], 53: ["Llovizna", "🌦️"],
+      55: ["Llovizna intensa", "🌧️"], 56: ["Llovizna helada", "🌧️"], 57: ["Llovizna helada", "🌧️"], 61: ["Lluvia ligera", "🌦️"],
+      63: ["Lluvia", "🌧️"], 65: ["Lluvia intensa", "🌧️"], 66: ["Lluvia helada", "🌧️"], 67: ["Lluvia helada", "🌧️"],
+      71: ["Nieve ligera", "🌨️"], 73: ["Nieve", "❄️"], 75: ["Nieve intensa", "❄️"], 77: ["Granizo fino", "🌨️"],
+      80: ["Chubascos", "🌦️"], 81: ["Chubascos", "🌧️"], 82: ["Chubascos fuertes", "🌧️"], 85: ["Chubascos de nieve", "🌨️"],
+      86: ["Chubascos de nieve", "❄️"], 95: ["Tormenta", "⛈️"], 96: ["Tormenta con granizo", "⛈️"], 99: ["Tormenta fuerte", "⛈️"]
+    };
+
+    const days = ["domingo","lunes","martes","miercoles","jueves","viernes","sabado"];
+    const months = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+
+    function pad(n) { return String(n).padStart(2, "0"); }
+    function fmtUpdated(d) { return "Act. " + pad(d.getHours()) + ":" + pad(d.getMinutes()); }
+
+    function applyScale(scale) {
+      const safe = Math.max(90, Math.min(115, Number(scale) || 100));
+      document.documentElement.style.setProperty("--ui-scale", safe + "%");
+      localStorage.setItem(STORAGE_SCALE_KEY, String(safe));
+    }
+
+    function applyThemeByHour() {
+      const h = new Date().getHours();
+      document.body.classList.toggle("day", h >= 7 && h < 20);
+    }
+
+    function tick() {
+      const now = new Date();
+      applyThemeByHour();
+      document.getElementById("time").innerHTML =
+        pad(now.getHours()) + ":" + pad(now.getMinutes()) + '<span class="secs">' + pad(now.getSeconds()) + "</span>";
+      document.getElementById("date").textContent =
+        days[now.getDay()] + " " + now.getDate() + " de " + months[now.getMonth()];
+    }
+
+    async function fetchJson(url) {
+      const r = await fetch(url, { cache: "no-store" });
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      return r.json();
+    }
+
+    async function reverseGeocode(lat, lon) {
+      const url = "https://geocoding-api.open-meteo.com/v1/reverse"
+        + "?latitude=" + encodeURIComponent(lat)
+        + "&longitude=" + encodeURIComponent(lon)
+        + "&language=es&count=1";
+      const data = await fetchJson(url);
+      const first = data && data.results && data.results[0];
+      return first ? (first.name || null) : null;
+    }
+
+    async function geocodeCity(cityName) {
+      const url = "https://geocoding-api.open-meteo.com/v1/search"
+        + "?name=" + encodeURIComponent(cityName)
+        + "&count=1&language=es";
+      const data = await fetchJson(url);
+      const first = data && data.results && data.results[0];
+      if (!first) throw new Error("Ciudad no encontrada");
+      return { lat: first.latitude, lon: first.longitude, place: first.name || cityName, source: "manual" };
+    }
+
+    function getCurrentPosition() {
+      return new Promise((resolve, reject) => {
+        if (!("geolocation" in navigator)) {
+          reject(new Error("Geolocalizacion no disponible"));
+          return;
+        }
+        navigator.geolocation.getCurrentPosition(
+          resolve,
+          reject,
+          { enableHighAccuracy: false, timeout: 8000, maximumAge: 10 * 60 * 1000 }
+        );
+      });
+    }
+
+    async function detectAutoLocation() {
+      const pos = await getCurrentPosition();
+      const lat = Number(pos.coords.latitude);
+      const lon = Number(pos.coords.longitude);
+      const place = await reverseGeocode(lat, lon);
+      return { lat, lon, place: place || "Tu zona", source: "auto" };
+    }
+
+    async function selectBestLocation(forceAuto) {
+      if (forceAuto) return detectAutoLocation();
+      try {
+        return await detectAutoLocation();
+      } catch (_) {
+        const savedCity = (localStorage.getItem(STORAGE_CITY_KEY) || "").trim();
+        if (savedCity) return geocodeCity(savedCity);
+        return { ...DEFAULT_LOCATION };
+      }
+    }
+
+    function renderMini(hourly) {
+      const host = document.getElementById("mini");
+      if (!hourly || !hourly.time || !hourly.temperature_2m || !hourly.weather_code) {
+        host.innerHTML = '<div class="mini-item">--</div><div class="mini-item">--</div><div class="mini-item">--</div><div class="mini-item">--</div>';
+        return;
+      }
+      const now = Date.now();
+      let start = 0;
+      for (let i = 0; i < hourly.time.length; i++) {
+        if (new Date(hourly.time[i]).getTime() >= now) {
+          start = i;
+          break;
+        }
+      }
+      const picks = [];
+      for (let j = 1; j <= 4; j++) {
+        const idx = Math.min(start + j * 3, hourly.time.length - 1);
+        const t = new Date(hourly.time[idx]);
+        const code = hourly.weather_code[idx];
+        const meta = WMO[code] || ["", "🌡️"];
+        picks.push(
+          '<div class="mini-item">'
+          + '<div class="mini-hour">' + pad(t.getHours()) + ':00</div>'
+          + '<div class="mini-icon">' + meta[1] + '</div>'
+          + '<div class="mini-temp">' + Math.round(hourly.temperature_2m[idx]) + '°</div>'
+          + '</div>'
+        );
+      }
+      host.innerHTML = picks.join("");
+    }
+
+    function renderWeather(data, stale) {
+      const c = data.current || {};
+      const d = data.daily || {};
+      const code = c.weather_code;
+      const meta = WMO[code] || ["Codigo " + code, "🌡️"];
+      const tmax = d.temperature_2m_max && d.temperature_2m_max[0];
+      const tmin = d.temperature_2m_min && d.temperature_2m_min[0];
+      const popMax = d.precipitation_probability_max && d.precipitation_probability_max[0];
+
+      document.getElementById("city").textContent = currentLocation.place;
+      document.getElementById("icon").textContent = meta[1];
+      document.getElementById("sky").textContent = meta[0];
+      document.getElementById("temp").innerHTML = Math.round(c.temperature_2m) + "<span>°</span>";
+      document.getElementById("feels").textContent = "Sensacion " + Math.round(c.apparent_temperature) + "°";
+      document.getElementById("today").textContent =
+        (tmax != null && tmin != null) ? ("Hoy " + Math.round(tmax) + "° / " + Math.round(tmin) + "°") : "Hoy --° / --°";
+      document.getElementById("humidity").textContent =
+        (c.relative_humidity_2m != null ? Math.round(c.relative_humidity_2m) : "--") + "%";
+      document.getElementById("pop").textContent =
+        (c.precipitation_probability != null ? Math.round(c.precipitation_probability) : "--") + "%";
+      document.getElementById("popMax").textContent =
+        (popMax != null ? Math.round(popMax) : "--") + "%";
+      document.getElementById("precip").textContent =
+        (c.precipitation != null ? Number(c.precipitation).toFixed(1) : "--") + " mm";
+      renderMini(data.hourly || null);
+
+      const src = currentLocation.source === "auto" ? "GPS/Wi-Fi" : "Ciudad";
+      const state = stale ? " sin red" : " en vivo";
+      document.getElementById("updated").textContent = fmtUpdated(new Date()) + " · " + src + state;
+    }
+
+    function saveLastWeather(data) {
+      localStorage.setItem(STORAGE_WEATHER_KEY, JSON.stringify({
+        ts: Date.now(),
+        location: currentLocation,
+        weather: data
+      }));
+    }
+
+    function restoreLastWeather() {
+      const raw = localStorage.getItem(STORAGE_WEATHER_KEY);
+      if (!raw) return false;
+      try {
+        const payload = JSON.parse(raw);
+        if (!payload || !payload.weather) return false;
+        if (payload.location) currentLocation = payload.location;
+        renderWeather(payload.weather, true);
+        return true;
+      } catch (_) {
+        return false;
+      }
+    }
+
+    async function loadWeather() {
+      const err = document.getElementById("err");
+      const btn = document.getElementById("refresh");
+      err.textContent = "";
+      btn.classList.add("busy");
+      btn.disabled = true;
+      const url = "https://api.open-meteo.com/v1/forecast"
+        + "?latitude=" + currentLocation.lat
+        + "&longitude=" + currentLocation.lon
+        + "&current=temperature_2m,apparent_temperature,relative_humidity_2m,precipitation,precipitation_probability,weather_code"
+        + "&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max"
+        + "&hourly=temperature_2m,weather_code,precipitation_probability"
+        + "&forecast_days=2"
+        + "&timezone=auto";
+      try {
+        const data = await fetchJson(url);
+        renderWeather(data, false);
+        saveLastWeather(data);
+      } catch (_) {
+        const restored = restoreLastWeather();
+        err.textContent = restored ? "Sin internet · mostrando ultimo dato guardado" : "Sin clima · revisa Wi-Fi";
+      } finally {
+        btn.classList.remove("busy");
+        btn.disabled = false;
+      }
+    }
+
+    async function relocalize(forceAuto) {
+      const err = document.getElementById("err");
+      const btn = document.getElementById("locate");
+      err.textContent = "";
+      btn.classList.add("busy");
+      btn.disabled = true;
+      try {
+        currentLocation = await selectBestLocation(forceAuto);
+      } catch (_) {
+        currentLocation = { ...DEFAULT_LOCATION };
+        err.textContent = "Ubicacion automatica no disponible";
+      } finally {
+        btn.classList.remove("busy");
+        btn.disabled = false;
+      }
+      document.getElementById("city").textContent = currentLocation.place;
+    }
+
+    async function chooseCityManually() {
+      const previous = localStorage.getItem(STORAGE_CITY_KEY) || "";
+      const typed = window.prompt("Escribe ciudad (ej: Badajoz)", previous);
+      if (typed == null) return;
+      const cityName = typed.trim();
+      if (!cityName) {
+        localStorage.removeItem(STORAGE_CITY_KEY);
+        await relocalize(false);
+        await loadWeather();
+        return;
+      }
+      const err = document.getElementById("err");
+      err.textContent = "";
+      try {
+        const resolved = await geocodeCity(cityName);
+        localStorage.setItem(STORAGE_CITY_KEY, cityName);
+        currentLocation = resolved;
+        document.getElementById("city").textContent = resolved.place;
+        await loadWeather();
+      } catch (_) {
+        err.textContent = "Ciudad no encontrada";
+      }
+    }
+
+    function setupHiddenScaleControl() {
+      let timer = null;
+      const dateEl = document.getElementById("date");
+      dateEl.addEventListener("pointerdown", () => {
+        timer = setTimeout(() => {
+          const current = localStorage.getItem(STORAGE_SCALE_KEY) || "100";
+          const selected = window.prompt("Tamano UI (90, 100, 110, 115)", current);
+          if (selected == null) return;
+          applyScale(selected);
+        }, 700);
+      });
+      const clear = () => {
+        if (timer) {
+          clearTimeout(timer);
+          timer = null;
+        }
+      };
+      dateEl.addEventListener("pointerup", clear);
+      dateEl.addEventListener("pointercancel", clear);
+      dateEl.addEventListener("pointerleave", clear);
+    }
+
+    document.getElementById("refresh").addEventListener("click", loadWeather);
+    document.getElementById("locate").addEventListener("click", async () => {
+      await relocalize(true);
+      await loadWeather();
+    });
+    document.getElementById("city").addEventListener("click", chooseCityManually);
+
+    applyScale(localStorage.getItem(STORAGE_SCALE_KEY) || "100");
+    setupHiddenScaleControl();
+    tick();
+    setInterval(tick, 1000);
+    (async () => {
+      await relocalize(false);
+      await loadWeather();
+    })();
+    setInterval(loadWeather, REFRESH_MS);
+  </script>
+</body>
+</html>

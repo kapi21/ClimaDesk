@@ -1,6 +1,6 @@
 # HANDOFF — ClimaDesk
 
-Última sesión: **2026-09-27**
+Última sesión: **2026-09-28**
 
 ## Estado
 - **Proyecto:** ClimaDesk (repo [kapi21/ClimaDesk](https://github.com/kapi21/ClimaDesk))
@@ -12,10 +12,10 @@
   - Fix overflow de horas dentro de la tarjeta de clima
   - Repo limpio (sin `downloads/` ni `panel/`)
   - README + captura landscape en `docs/climadesk-preview.png`
+  - Selector de ciudad con búsqueda (sin prompt)
 - **Pendiente (siguiente sesión):**
-  1. Selector de ciudad con búsqueda (sustituir `prompt`)
-  2. Renombrar `applicationId` / package a algo tipo `es.climadesk.app` (implica reinstalar)
-  3. Icono launcher propio con marca ClimaDesk
+  1. Renombrar `applicationId` / package a algo tipo `es.climadesk.app` (implica reinstalar)
+  2. Icono launcher propio con marca ClimaDesk
 - **Archivos clave:**
   - `kiosk-app/app/src/main/assets/index.html`
   - `kiosk-app/app/src/main/java/es/redmi4x/relojclima/MainActivity.java`
@@ -31,7 +31,7 @@
 ## Roadmap
 | Prioridad | Ítem | Notas |
 |-----------|------|--------|
-| P1 | Selector ciudad UI | Lista/autocomplete Open-Meteo geocoding |
+| P1 | Selector ciudad UI | ✅ Lista/autocomplete Open-Meteo geocoding |
 | P1 | `applicationId` ClimaDesk | Breaking install; actualizar label ya es ClimaDesk |
 | P2 | Icono + branding | Sustituir `ic_launcher.xml` genérico |
 | P2 | Modo solo-reloj | Ocultar stats / mini-pronóstico |

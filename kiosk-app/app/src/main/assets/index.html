@@ -239,6 +239,74 @@
       font-size: 0.78rem;
       min-height: 1em;
     }
+    .city-picker {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      background: var(--bg);
+      color: var(--fg);
+      padding: 0.75rem 0.9rem 1rem;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+    .city-picker.open { display: flex; }
+    .city-picker-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .city-picker-title {
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .city-picker-cancel {
+      border: 1px solid var(--line);
+      background: var(--card);
+      color: var(--accent);
+      border-radius: 0.55rem;
+      padding: 0.45rem 0.75rem;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+    .city-picker-input {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: var(--card);
+      color: var(--fg);
+      border-radius: 0.55rem;
+      padding: 0.7rem 0.8rem;
+      font-size: 1rem;
+      -webkit-user-select: text;
+      user-select: text;
+    }
+    .city-picker-status {
+      font-size: 0.85rem;
+      color: var(--muted);
+      min-height: 1.2rem;
+    }
+    .city-picker-list {
+      flex: 1;
+      overflow: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      -webkit-overflow-scrolling: touch;
+    }
+    .city-picker-item {
+      text-align: left;
+      border: 1px solid var(--line);
+      background: var(--card);
+      color: var(--fg);
+      border-radius: 0.55rem;
+      padding: 0.75rem 0.8rem;
+      font-size: 0.95rem;
+      cursor: pointer;
+    }
+    .city-picker-item:active { opacity: 0.75; }
     @media (orientation: landscape) {
       .screen {
         grid-template-rows: auto 1fr auto;
@@ -322,13 +390,36 @@
     <div class="err" id="err"></div>
   </div>
 
+  <div class="city-picker" id="city-picker" aria-hidden="true">
+    <div class="city-picker-head">
+      <div class="city-picker-title">Elegir ciudad</div>
+      <button type="button" class="city-picker-cancel" id="city-picker-cancel">Cancelar</button>
+    </div>
+    <input
+      class="city-picker-input"
+      id="city-picker-input"
+      type="search"
+      enterkeyhint="search"
+      autocomplete="off"
+      autocorrect="off"
+      spellcheck="false"
+      placeholder="Buscar ciudad…"
+    />
+    <div class="city-picker-status" id="city-picker-status">Escribe para buscar</div>
+    <div class="city-picker-list" id="city-picker-list" role="listbox"></div>
+  </div>
+
   <script>
     const DEFAULT_LOCATION = { lat: 38.8794, lon: -6.9707, place: "Badajoz", source: "manual" };
     const STORAGE_CITY_KEY = "climadesk_manual_city";
+    const STORAGE_LAT_KEY = "climadesk_manual_lat";
+    const STORAGE_LON_KEY = "climadesk_manual_lon";
     const STORAGE_WEATHER_KEY = "climadesk_last_weather";
     const STORAGE_SCALE_KEY = "climadesk_ui_scale";
     const REFRESH_MS = 30 * 60 * 1000;
     let currentLocation = { ...DEFAULT_LOCATION };
+    let citySearchSeq = 0;
+    let citySearchTimer = null;
 
     const WMO = {
       0: ["Despejado", "☀️"], 1: ["Mayormente despejado", "🌤️"], 2: ["Parcialmente nublado", "⛅"], 3: ["Nublado", "☁️"],
@@ -342,6 +433,32 @@
 
     const days = ["domingo","lunes","martes","miercoles","jueves","viernes","sabado"];
     const months = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+
+    function clearManualCityStorage() {
+      localStorage.removeItem(STORAGE_CITY_KEY);
+      localStorage.removeItem(STORAGE_LAT_KEY);
+      localStorage.removeItem(STORAGE_LON_KEY);
+    }
+
+    function saveManualCity(name, lat, lon) {
+      localStorage.setItem(STORAGE_CITY_KEY, String(name || "").trim());
+      localStorage.setItem(STORAGE_LAT_KEY, String(lat));
+      localStorage.setItem(STORAGE_LON_KEY, String(lon));
+    }
+
+    function loadSavedManualLocation() {
+      const placeRaw = localStorage.getItem(STORAGE_CITY_KEY);
+      const latRaw = localStorage.getItem(STORAGE_LAT_KEY);
+      const lonRaw = localStorage.getItem(STORAGE_LON_KEY);
+      const place = (placeRaw || "").trim();
+      if (!place || !latRaw || !lonRaw) return null;
+      const lat = Number(latRaw);
+      const lon = Number(lonRaw);
+      if (Number.isFinite(lat) && Number.isFinite(lon)) {
+        return { lat, lon, place, source: "manual" };
+      }
+      return null;
+    }
 
     function pad(n) { return String(n).padStart(2, "0"); }
     function fmtUpdated(d) { return "Act. " + pad(d.getHours()) + ":" + pad(d.getMinutes()); }
@@ -382,6 +499,114 @@
       return first ? (first.name || null) : null;
     }
 
+    function formatCityLabel(name, admin1, country) {
+      return [name, admin1, country]
+        .map(function (p) { return (p || "").trim(); })
+        .filter(Boolean)
+        .join(", ");
+    }
+
+    async function searchCities(query) {
+      const q = String(query || "").trim();
+      if (q.length < 2) return [];
+      const url = "https://geocoding-api.open-meteo.com/v1/search"
+        + "?name=" + encodeURIComponent(q)
+        + "&count=8&language=es";
+      const data = await fetchJson(url);
+      const rows = (data && data.results) || [];
+      return rows.map(function (r) {
+        const name = r.name || q;
+        const admin1 = r.admin1 || "";
+        const country = r.country || "";
+        return {
+          lat: r.latitude,
+          lon: r.longitude,
+          name: name,
+          admin1: admin1,
+          country: country,
+          label: formatCityLabel(name, admin1, country)
+        };
+      });
+    }
+
+    function setCityPickerStatus(text) {
+      document.getElementById("city-picker-status").textContent = text || "";
+    }
+
+    function renderCityPickerResults(items) {
+      const host = document.getElementById("city-picker-list");
+      host.innerHTML = "";
+      (items || []).forEach(function (item) {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "city-picker-item";
+        btn.setAttribute("role", "option");
+        btn.textContent = item.label;
+        btn.addEventListener("click", async function () {
+          saveManualCity(item.name, item.lat, item.lon);
+          currentLocation = {
+            lat: item.lat,
+            lon: item.lon,
+            place: item.name,
+            source: "manual"
+          };
+          document.getElementById("city").textContent = item.name;
+          closeCityPicker();
+          await loadWeather();
+        });
+        host.appendChild(btn);
+      });
+    }
+
+    function closeCityPicker() {
+      const panel = document.getElementById("city-picker");
+      panel.classList.remove("open");
+      panel.setAttribute("aria-hidden", "true");
+      if (citySearchTimer) {
+        clearTimeout(citySearchTimer);
+        citySearchTimer = null;
+      }
+      citySearchSeq += 1;
+    }
+
+    function openCityPicker() {
+      const panel = document.getElementById("city-picker");
+      const input = document.getElementById("city-picker-input");
+      panel.classList.add("open");
+      panel.setAttribute("aria-hidden", "false");
+      input.value = localStorage.getItem(STORAGE_CITY_KEY) || "";
+      renderCityPickerResults([]);
+      setCityPickerStatus("Escribe para buscar");
+      input.focus();
+      if (input.value.trim().length >= 2) runCitySearch(input.value);
+    }
+
+    async function runCitySearch(raw) {
+      const q = String(raw || "").trim();
+      const seq = ++citySearchSeq;
+      if (q.length < 2) {
+        renderCityPickerResults([]);
+        setCityPickerStatus("Escribe para buscar");
+        return;
+      }
+      setCityPickerStatus("Buscando…");
+      try {
+        const items = await searchCities(q);
+        if (seq !== citySearchSeq) return;
+        if (!items.length) {
+          renderCityPickerResults([]);
+          setCityPickerStatus("Sin resultados");
+          return;
+        }
+        renderCityPickerResults(items);
+        setCityPickerStatus(items.length + " resultado" + (items.length === 1 ? "" : "s"));
+      } catch (_) {
+        if (seq !== citySearchSeq) return;
+        renderCityPickerResults([]);
+        setCityPickerStatus("No se pudo buscar");
+      }
+    }
+
     async function geocodeCity(cityName) {
       const url = "https://geocoding-api.open-meteo.com/v1/search"
         + "?name=" + encodeURIComponent(cityName)
@@ -416,11 +641,17 @@
 
     async function selectBestLocation(forceAuto) {
       if (forceAuto) return detectAutoLocation();
+      const saved = loadSavedManualLocation();
+      if (saved) return saved;
+      const savedCity = (localStorage.getItem(STORAGE_CITY_KEY) || "").trim();
+      if (savedCity) {
+        try {
+          return await geocodeCity(savedCity);
+        } catch (_) {}
+      }
       try {
         return await detectAutoLocation();
       } catch (_) {
-        const savedCity = (localStorage.getItem(STORAGE_CITY_KEY) || "").trim();
-        if (savedCity) return geocodeCity(savedCity);
         return { ...DEFAULT_LOCATION };
       }
     }
@@ -554,28 +785,8 @@
       document.getElementById("city").textContent = currentLocation.place;
     }
 
-    async function chooseCityManually() {
-      const previous = localStorage.getItem(STORAGE_CITY_KEY) || "";
-      const typed = window.prompt("Escribe ciudad (ej: Badajoz)", previous);
-      if (typed == null) return;
-      const cityName = typed.trim();
-      if (!cityName) {
-        localStorage.removeItem(STORAGE_CITY_KEY);
-        await relocalize(false);
-        await loadWeather();
-        return;
-      }
-      const err = document.getElementById("err");
-      err.textContent = "";
-      try {
-        const resolved = await geocodeCity(cityName);
-        localStorage.setItem(STORAGE_CITY_KEY, cityName);
-        currentLocation = resolved;
-        document.getElementById("city").textContent = resolved.place;
-        await loadWeather();
-      } catch (_) {
-        err.textContent = "Ciudad no encontrada";
-      }
+    function chooseCityManually() {
+      openCityPicker();
     }
 
     function setupHiddenScaleControl() {
@@ -602,8 +813,17 @@
 
     document.getElementById("refresh").addEventListener("click", loadWeather);
     document.getElementById("locate").addEventListener("click", async () => {
+      clearManualCityStorage();
       await relocalize(true);
       await loadWeather();
+    });
+    document.getElementById("city-picker-cancel").addEventListener("click", closeCityPicker);
+    document.getElementById("city-picker-input").addEventListener("input", function (e) {
+      const value = e.target.value;
+      if (citySearchTimer) clearTimeout(citySearchTimer);
+      citySearchTimer = setTimeout(function () {
+        runCitySearch(value);
+      }, 300);
     });
     document.getElementById("city").addEventListener("click", chooseCityManually);
 

@@ -120,8 +120,8 @@ El APK queda en:
 | Hecho | Package / `applicationId` → `es.climadesk.app` | ✅ v1.7 |
 | Hecho | Icono propio reloj+sol (adaptive + legacy) | ✅ |
 | Hecho | Kiosk duro: Home + autoarranque (MIUI) | ✅ v1.8 |
-| Siguiente | APK release firmada + tag en GitHub | Pendiente (P3-B) |
 | Siguiente | Modo solo-reloj | Pendiente (P2) |
+| Luego | APK release firmada + tag en GitHub | Aplazado (P3-B, sin keystore aún) |
 
 Estado de desarrollo más detallado: [HANDOFF.md](HANDOFF.md).
 

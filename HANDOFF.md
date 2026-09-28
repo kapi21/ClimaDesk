@@ -1,43 +1,36 @@
 # HANDOFF — ClimaDesk
 
-Última sesión: **2026-09-28**
+Última sesión: **2026-09-28** (cerrada)
 
 ## Estado
 - **Proyecto:** ClimaDesk (repo [kapi21/ClimaDesk](https://github.com/kapi21/ClimaDesk))
 - **Versión app:** `1.8` (`versionCode` 9) — package `es.climadesk.app`
-- **Hecho:**
+- **Hecho (esta sesión y previas en main):**
   - App kiosk WebView autónoma (Open-Meteo)
-  - Ubicación GPS/Wi‑Fi + ciudad manual
+  - Ubicación GPS/Wi‑Fi + ciudad manual + selector con búsqueda
   - Refresh, día/noche, cache offline, mini-pronóstico
-  - Fix overflow de horas dentro de la tarjeta de clima
-  - Repo limpio (sin `downloads/` ni `panel/`)
-  - README + captura landscape en `docs/climadesk-preview.png`
-  - Selector de ciudad con búsqueda (sin prompt)
-  - Rename `applicationId` / package → `es.climadesk.app` (v1.7)
-  - Icono launcher flat reloj+sol (adaptive API 26+ / vector legacy)
-  - **Kiosk duro v1.8:** autoarranque al boot (`BootReceiver`) + puede ser launcher Home (sujeto a MIUI / Autostart)
-- **Pendiente (siguiente sesión):**
-  1. Release firmada + tag GitHub (**P3-B**)
-  2. Modo solo-reloj (ocultar stats / mini-pronóstico) (**P2**, aplazado)
+  - Package `es.climadesk.app` (v1.7) + icono reloj+sol
+  - **Kiosk duro v1.8:** `BootReceiver` + HOME launcher (Autostart MIUI)
+- **Pendiente (próxima sesión):**
+  1. **P2** Modo solo-reloj (ocultar stats / mini-pronóstico) — candidato lógico siguiente
+  2. **P3-B** Release firmada + tag GitHub — **aplazado**: no hay keystore; crear uno local (`.jks` + `keystore.properties` gitignored) cuando se retome
 - **Archivos clave:**
   - `kiosk-app/app/src/main/assets/index.html`
   - `kiosk-app/app/src/main/java/es/climadesk/app/MainActivity.java`
   - `kiosk-app/app/src/main/java/es/climadesk/app/BootReceiver.java`
   - `kiosk-app/app/src/main/AndroidManifest.xml`
   - `kiosk-app/app/src/main/res/drawable/ic_launcher_foreground.xml`
-  - `README.md`, `docs/climadesk-preview.png`
-  - Spec kiosk: `docs/superpowers/specs/2026-09-28-kiosk-hard-design.md`
+  - Specs: `docs/superpowers/specs/`
 - **Cómo verificar:**
   - Compilar: `cd kiosk-app` → `gradlew.bat assembleDebug`
   - Instalar en Redmi (`6f207ef7d440`): si ADB falla por MIUI, push a `/sdcard/Download/` y aceptar instalador
-  - Tras instalar: pulsar Home → debe aparecer ClimaDesk en el selector de launcher
-  - Con Autostart MIUI ON: reinicio → debería abrir ClimaDesk (si MIUI no lo bloquea)
+  - Kiosk: Home → selector launcher; Autostart MIUI para boot
 - **Riesgos / notas:**
   - MIUI bloquea `adb install` → `INSTALL_FAILED_USER_RESTRICTED`
   - Dos dispositivos ADB a veces: usar `-s 6f207ef7d440`
-  - `local.properties` es local (no va al repo)
-  - Tras el rename hay que **reinstalar** el APK; desinstala la app antigua `es.redmi4x.relojclima` si no quieres dos iconos
-  - El boot → MainActivity depende de **Autostart** en MIUI; no hay Device Admin ni lock task
+  - Si ClimaDesk es launcher por defecto y no puedes salir: `adb shell am force-stop es.climadesk.app` y `adb shell am start -a android.settings.SETTINGS`
+  - Pantalla de bloqueo «Deslizar» en este MIUI **no se pudo quitar** sin root / opción Ninguno; con USB, `svc power stayon` ayuda a no apagar
+  - `local.properties` y futuros `*.jks` / `keystore.properties` son locales (no van al repo)
 
 ## Kiosk duro (activar / quitar)
 
@@ -54,16 +47,17 @@ Referencia: `docs/superpowers/specs/2026-09-28-kiosk-hard-design.md`
 1. **Ajustes → Apps → ClimaDesk → Abrir de forma predeterminada** → borrar defaults (o elegir el launcher del sistema al pulsar Home).
 2. Desactivar **Autostart** de ClimaDesk en MIUI.
 3. O desinstalar la app.
+4. Si no puedes abrir Ajustes: ADB → `am start -a android.settings.SETTINGS` (tras `force-stop` de ClimaDesk).
 
 ## Roadmap
 | Prioridad | Ítem | Notas |
 |-----------|------|--------|
-| P1 | Selector ciudad UI | ✅ Lista/autocomplete Open-Meteo geocoding |
-| P1 | `applicationId` ClimaDesk | ✅ `es.climadesk.app` v1.7; reinstalar / desinstalar id viejo |
-| P2 | Icono + branding | ✅ Reloj+sol flat; adaptive + legacy vector |
-| P2 | Modo solo-reloj | Ocultar stats / mini-pronóstico |
-| P3 | Kiosk duro | ✅ v1.8: HOME + BOOT (usuario elige launcher / Autostart) |
-| P3 | Release firmada | APK release + tag GitHub |
+| P1 | Selector ciudad UI | ✅ |
+| P1 | `applicationId` ClimaDesk | ✅ `es.climadesk.app` |
+| P2 | Icono + branding | ✅ |
+| P2 | Modo solo-reloj | Pendiente — siguiente candidato |
+| P3 | Kiosk duro | ✅ v1.8 HOME + BOOT |
+| P3 | Release firmada | Pendiente (P3-B) — aplazado sin keystore |
 
 ## Dispositivo de prueba
 - Xiaomi Redmi 4X (santoni), Android 7.1.2 / MIUI

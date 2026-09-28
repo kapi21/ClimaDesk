@@ -54,6 +54,24 @@ No hace falta Google Play Services para el clima: la app habla directamente con 
 2. Concede **ubicación** si quieres detección automática.
 3. Deja la pantalla encendida (idealmente con el cargador conectado).
 
+### Usar como reloj de mesa (kiosk)
+
+Desde **v1.8**, ClimaDesk puede ser tu **launcher (Home)** y abrirse tras reiniciar el móvil. En MIUI hace falta permitir **Autostart**; no hay pantalla de configuración dentro de la app.
+
+**Activar**
+
+1. Instala o actualiza ClimaDesk.
+2. MIUI: **Seguridad → Autostart** → permitir ClimaDesk.
+3. Pulsa **Home** → elige **ClimaDesk** → **Siempre**.
+
+**Quitar**
+
+1. **Ajustes → Apps → ClimaDesk → Abrir de forma predeterminada** → borrar defaults (o elige el launcher del sistema al pulsar Home).
+2. Desactiva Autostart de ClimaDesk.
+3. O desinstala la app.
+
+Más detalle en [HANDOFF.md](HANDOFF.md) y en `docs/superpowers/specs/2026-09-28-kiosk-hard-design.md`.
+
 ### Gestos útiles
 
 - **📍** — forzar ubicación automática  
@@ -101,9 +119,9 @@ El APK queda en:
 | Hecho | Selector de ciudad con búsqueda (sin `prompt`) | ✅ |
 | Hecho | Package / `applicationId` → `es.climadesk.app` | ✅ v1.7 |
 | Hecho | Icono propio reloj+sol (adaptive + legacy) | ✅ |
-| Siguiente | Modo solo-reloj | Pendiente |
-| Luego | Autoarranque/brillo kiosk | Ideas |
-| Luego | APK release firmada + tag en GitHub | Ideas |
+| Hecho | Kiosk duro: Home + autoarranque (MIUI) | ✅ v1.8 |
+| Siguiente | APK release firmada + tag en GitHub | Pendiente (P3-B) |
+| Siguiente | Modo solo-reloj | Pendiente (P2) |
 
 Estado de desarrollo más detallado: [HANDOFF.md](HANDOFF.md).
 

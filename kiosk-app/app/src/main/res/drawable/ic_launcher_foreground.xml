@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Clock face — within adaptive safe zone -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#7EB8FF"
+        android:strokeWidth="5"
+        android:pathData="M54,54m-22,0a22,22 0,1 1,44 0a22,22 0,1 1,-44 0" />
+    <!-- Hour hand -->
+    <path
+        android:strokeColor="#F4F1EA"
+        android:strokeWidth="4.5"
+        android:strokeLineCap="round"
+        android:pathData="M54,54 L54,36" />
+    <!-- Minute hand -->
+    <path
+        android:strokeColor="#7EB8FF"
+        android:strokeWidth="3.5"
+        android:strokeLineCap="round"
+        android:pathData="M54,54 L70,54" />
+    <!-- Center dot -->
+    <path
+        android:fillColor="#F4F1EA"
+        android:pathData="M54,54m-2.5,0a2.5,2.5 0,1 1,5 0a2.5,2.5 0,1 1,-5 0" />
+    <!-- Sun disc (upper-right of dial) -->
+    <path
+        android:fillColor="#F4C96A"
+        android:pathData="M72,36m-6.5,0a6.5,6.5 0,1 1,13 0a6.5,6.5 0,1 1,-13 0" />
+    <!-- Sun rays -->
+    <path
+        android:strokeColor="#F4C96A"
+        android:strokeWidth="2.2"
+        android:strokeLineCap="round"
+        android:pathData="M72,26 L72,28.5" />
+    <path
+        android:strokeColor="#F4C96A"
+        android:strokeWidth="2.2"
+        android:strokeLineCap="round"
+        android:pathData="M72,43.5 L72,46" />
+    <path
+        android:strokeColor="#F4C96A"
+        android:strokeWidth="2.2"
+        android:strokeLineCap="round"
+        android:pathData="M62,36 L64.5,36" />
+    <path
+        android:strokeColor="#F4C96A"
+        android:strokeWidth="2.2"
+        android:strokeLineCap="round"
+        android:pathData="M79.5,36 L82,36" />
+    <path
+        android:strokeColor="#F4C96A"
+        android:strokeWidth="2.2"
+        android:strokeLineCap="round"
+        android:pathData="M65.2,29.2 L66.9,30.9" />
+    <path
+        android:strokeColor="#F4C96A"
+        android:strokeWidth="2.2"
+        android:strokeLineCap="round"
+        android:pathData="M77.1,41.1 L78.8,42.8" />
+</vector>

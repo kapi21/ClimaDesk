@@ -1,4 +1,4 @@
-package es.redmi4x.relojclima;
+package es.climadesk.app;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;

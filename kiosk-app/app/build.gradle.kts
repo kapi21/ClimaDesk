@@ -3,15 +3,15 @@ plugins {
 }
 
 android {
-    namespace = "es.redmi4x.relojclima"
+    namespace = "es.climadesk.app"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "es.redmi4x.relojclima"
+        applicationId = "es.climadesk.app"
         minSdk = 21
         targetSdk = 25
-        versionCode = 7
-        versionName = "1.6"
+        versionCode = 8
+        versionName = "1.7"
     }
 
     buildTypes {

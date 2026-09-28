@@ -12,5 +12,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "RelojClimaKiosk"
+rootProject.name = "ClimaDesk"
 include(":app")

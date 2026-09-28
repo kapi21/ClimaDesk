@@ -14,11 +14,13 @@
   - README + captura landscape en `docs/climadesk-preview.png`
   - Selector de ciudad con búsqueda (sin prompt)
   - Rename `applicationId` / package → `es.climadesk.app` (v1.7)
+  - Icono launcher flat reloj+sol (adaptive API 26+ / vector legacy)
 - **Pendiente (siguiente sesión):**
-  1. Icono launcher propio con marca ClimaDesk
+  1. Modo solo-reloj (ocultar stats / mini-pronóstico)
 - **Archivos clave:**
   - `kiosk-app/app/src/main/assets/index.html`
   - `kiosk-app/app/src/main/java/es/climadesk/app/MainActivity.java`
+  - `kiosk-app/app/src/main/res/drawable/ic_launcher_foreground.xml`
   - `README.md`, `docs/climadesk-preview.png`
 - **Cómo verificar:**
   - Compilar: `cd kiosk-app` → `gradlew.bat assembleDebug`
@@ -34,7 +36,7 @@
 |-----------|------|--------|
 | P1 | Selector ciudad UI | ✅ Lista/autocomplete Open-Meteo geocoding |
 | P1 | `applicationId` ClimaDesk | ✅ `es.climadesk.app` v1.7; reinstalar / desinstalar id viejo |
-| P2 | Icono + branding | Sustituir `ic_launcher.xml` genérico |
+| P2 | Icono + branding | ✅ Reloj+sol flat; adaptive + legacy vector |
 | P2 | Modo solo-reloj | Ocultar stats / mini-pronóstico |
 | P3 | Kiosk duro | Autoarranque, brillo, launcher por defecto (por dispositivo) |
 | P3 | Release firmada | APK release + tag GitHub |

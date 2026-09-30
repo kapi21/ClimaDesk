@@ -31,3 +31,4 @@ downloads/
 # Node / misc
 node_modules/
 *.log
+.superpowers/

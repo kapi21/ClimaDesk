@@ -1,16 +1,18 @@
 # HANDOFF — ClimaDesk
 
-Última sesión: **2026-09-28** (cerrada)
+Última sesión: **2026-09-30** (cerrada)
 
 ## Estado
 - **Proyecto:** ClimaDesk (repo [kapi21/ClimaDesk](https://github.com/kapi21/ClimaDesk))
 - **Versión app:** `1.8` (`versionCode` 9) — package `es.climadesk.app`
 - **Hecho (esta sesión y previas en main):**
+  - Limpieza de UI: eliminada etiqueta confusa «Ciudad en vivo» / origen y estado de red en `#updated`; ahora solo muestra `Act. HH:MM`
   - App kiosk WebView autónoma (Open-Meteo)
   - Ubicación GPS/Wi‑Fi + ciudad manual + selector con búsqueda
   - Refresh, día/noche, cache offline, mini-pronóstico
   - Package `es.climadesk.app` (v1.7) + icono reloj+sol
   - **Kiosk duro v1.8:** `BootReceiver` + HOME launcher (Autostart MIUI)
+  - APK compilado e inyectado en Redmi 4X (`/sdcard/Download/ClimaDesk.apk`) vía ADB
 - **Pendiente (próxima sesión):**
   1. **P2** Modo solo-reloj (ocultar stats / mini-pronóstico) — candidato lógico siguiente
   2. **P3-B** Release firmada + tag GitHub — **aplazado**: no hay keystore; crear uno local (`.jks` + `keystore.properties` gitignored) cuando se retome

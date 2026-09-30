@@ -713,9 +713,7 @@
         (c.precipitation != null ? Number(c.precipitation).toFixed(1) : "--") + " mm";
       renderMini(data.hourly || null);
 
-      const src = currentLocation.source === "auto" ? "GPS/Wi-Fi" : "Ciudad";
-      const state = stale ? " sin red" : " en vivo";
-      document.getElementById("updated").textContent = fmtUpdated(new Date()) + " · " + src + state;
+      document.getElementById("updated").textContent = fmtUpdated(new Date());
     }
 
     function saveLastWeather(data) {

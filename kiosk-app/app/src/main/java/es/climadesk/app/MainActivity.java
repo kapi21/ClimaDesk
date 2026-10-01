@@ -140,6 +140,12 @@ public class MainActivity extends Activity {
             ) {
                 callback.invoke(origin, true, false);
             }
+
+            @Override
+            public boolean onConsoleMessage(android.webkit.ConsoleMessage cm) {
+                Log.d("WebConsole", cm.message() + " [" + cm.sourceId() + ":" + cm.lineNumber() + "]");
+                return true;
+            }
         });
         // Open-Meteo HTTPS; allow mixed only if needed later
         if (android.os.Build.VERSION.SDK_INT >= 21) {

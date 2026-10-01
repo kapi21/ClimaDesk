@@ -82,6 +82,10 @@
       padding: 0;
     }
 
+    html {
+      font-size: 11px;
+    }
+
     html, body {
       width: 100%;
       height: 100%;
@@ -93,6 +97,7 @@
       user-select: none;
       touch-action: manipulation;
       transition: background-color 0.4s ease, color 0.4s ease;
+      font-size: 11px;
     }
 
     .container {
@@ -100,7 +105,7 @@
       height: 100vh;
       display: flex;
       flex-direction: column;
-      padding: 8px 12px 10px;
+      padding: 4px 8px 6px;
       box-sizing: border-box;
     }
 
@@ -109,7 +114,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      height: 32px;
+      height: 26px;
       padding: 0 4px;
       font-size: 1.05rem;
       font-weight: 700;
@@ -168,8 +173,8 @@
 
     .card {
       background-color: var(--card-bg);
-      border: 3px solid var(--border-ink);
-      border-radius: 18px;
+      border: 2px solid var(--border-ink);
+      border-radius: 14px;
       overflow: hidden;
       display: flex;
       flex-direction: column;
@@ -177,38 +182,39 @@
     }
 
     .card-left {
-      flex: 1.08;
-      margin-right: 10px;
+      flex: 1.15;
+      margin-right: 8px;
     }
 
     .card-middle {
-      flex: 1.16;
-      margin-right: 10px;
+      flex: 1.18;
+      margin-right: 8px;
     }
 
     .card-right {
-      flex: 1;
+      flex: 1.05;
     }
 
-    /* Columna 1: Reloj Grande, Clima, Próximas Horas, Sol */
+    /* Columna 1: Reloj Grande y Sol */
     .left-section-top {
-      padding: 10px 14px 8px;
+      padding: 6px 8px 3px;
       display: flex;
       flex-direction: column;
       align-items: center;
       text-align: center;
-      flex: 1.35;
-      justify-content: space-between;
+      flex: 1.45;
+      justify-content: space-around;
     }
 
     .header-date {
-      font-size: 1.45rem;
+      font-size: 1.02rem;
       font-weight: 800;
-      letter-spacing: 0.01em;
+      letter-spacing: 0.02em;
       color: var(--text-main);
       width: 100%;
-      text-align: left;
+      text-align: center;
       line-height: 1.15;
+      text-transform: uppercase;
     }
 
     .svg-clock {
@@ -216,19 +222,19 @@
       align-items: center;
       justify-content: center;
       width: 100%;
-      height: 126px;
+      height: 118px;
       flex-shrink: 0;
       margin: 1px 0;
     }
 
     .clock-digit {
-      width: 70px;
-      height: 122px;
+      width: 58px;
+      height: 112px;
     }
 
     .clock-colon {
-      width: 22px;
-      height: 122px;
+      width: 18px;
+      height: 112px;
     }
 
     .seg {
@@ -244,79 +250,118 @@
       fill: var(--text-main);
     }
 
-    .current-condition-row {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      padding: 4px 10px;
-      background: var(--tile-bg);
-      border: 1.5px solid var(--border-light);
-      border-radius: 12px;
-    }
-
-    .weather-main-icon {
-      width: 50px;
-      height: 50px;
-      margin-right: 16px;
-    }
-
-    .weather-main-info {
-      text-align: left;
-    }
-
-    .condition-text {
-      font-size: 1.25rem;
-      font-weight: 800;
-      line-height: 1.15;
-      color: var(--text-main);
-    }
-
-    .temp-range-text {
-      font-size: 1.6rem;
-      font-weight: 800;
-      color: var(--text-main);
-      letter-spacing: -0.01em;
-    }
-
     .divider {
-      height: 2.5px;
+      height: 2px;
       background-color: var(--border-ink);
       width: 100%;
       flex-shrink: 0;
     }
 
-    /* Subsección Central: Sensación & Próximas 4 Horas */
-    .left-section-middle {
-      padding: 8px 12px;
+    .left-section-bottom {
+      padding: 6px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      flex: 0.75;
+      background-color: var(--tile-bg);
+    }
+
+    .sun-time {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+    }
+
+    .sun-time svg {
+      width: 28px;
+      height: 28px;
+      flex-shrink: 0;
+    }
+
+    /* Columna 2: Clima Actual y Próximas Horas */
+    .weather-center-box {
+      flex: 1.35;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 8px;
+      background: var(--card-bg);
+      gap: 3px;
+    }
+
+    .weather-hero-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .weather-main-icon {
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .weather-temp-main {
+      font-size: 3.6rem;
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      color: var(--text-main);
+    }
+
+    .weather-details-row {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .condition-text {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: 0.01em;
+    }
+
+    .weather-sub-info {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--text-muted);
+    }
+
+    .weather-sub-info span {
+      color: var(--text-main);
+    }
+
+    .hourly-center-box {
+      flex: 0.95;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      flex: 1;
-    }
-
-    .feels-like-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 6px 12px;
+      padding: 4px 6px;
       background: var(--tile-bg);
-      border: 1.5px solid var(--border-light);
-      border-radius: 10px;
     }
 
-    .feels-label {
-      font-size: 1.1rem;
+    .hourly-title {
+      font-size: 0.72rem;
       font-weight: 800;
-      color: var(--text-muted);
+      letter-spacing: 0.05em;
       text-transform: uppercase;
-      letter-spacing: 0.03em;
-    }
-
-    .feels-val {
-      font-size: 1.55rem;
-      font-weight: 800;
-      color: var(--text-main);
+      color: var(--text-muted);
+      text-align: left;
     }
 
     .hourly-forecast-row {
@@ -325,8 +370,8 @@
       justify-content: space-between;
       align-items: center;
       flex: 1;
-      padding-top: 6px;
-      gap: 6px;
+      padding-top: 3px;
+      gap: 4px;
     }
 
     .hourly-item {
@@ -336,110 +381,45 @@
       justify-content: center;
       flex: 1;
       height: 100%;
-      background: var(--tile-bg);
+      background: var(--card-bg);
       border: 1.5px solid var(--border-light);
-      border-radius: 10px;
-      padding: 4px 2px;
+      border-radius: 8px;
+      padding: 2px 1px;
     }
 
     .hourly-time {
-      font-size: 0.95rem;
+      font-size: 0.75rem;
       font-weight: 800;
       color: var(--text-muted);
-      margin-bottom: 2px;
+      margin-bottom: 1px;
     }
 
     .hourly-icon {
-      width: 34px;
-      height: 34px;
+      width: 26px;
+      height: 26px;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 2px 0;
+      margin: 1px 0;
     }
 
     .hourly-temp {
-      font-size: 1.25rem;
+      font-size: 0.95rem;
       font-weight: 800;
       color: var(--text-main);
     }
 
-    .left-section-bottom {
-      padding: 10px 14px;
-      display: flex;
-      align-items: center;
-      justify-content: space-around;
-      flex: 0.52;
-      background-color: var(--tile-bg);
-    }
-
-    .sun-time {
-      display: inline-flex;
-      align-items: center;
-      gap: 14px;
-      font-weight: 800;
-    }
-
-    .sun-time svg {
-      width: 42px;
-      height: 42px;
-      flex-shrink: 0;
-      margin-right: 12px;
-    }
-
-    /* Columna 2: Calidad del aire y métricas atmosféricas */
-    .air-top-row {
-      display: flex;
-      flex-direction: row;
-      padding: 10px 6px;
-      text-align: center;
-      flex-shrink: 0;
-      background: var(--tile-bg);
-      border-bottom: 2.5px solid var(--border-ink);
-    }
-
-    .air-col {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-    }
-
-    .air-col:not(:last-child)::after {
-      content: "";
-      position: absolute;
-      right: 0;
-      top: 10%;
-      height: 80%;
-      width: 2px;
-      background-color: var(--border-light);
-    }
-
-    .air-label {
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--text-muted);
-      margin-bottom: 2px;
-    }
-
-    .air-val {
-      font-size: 1.65rem;
-      font-weight: 800;
-      color: var(--text-main);
-    }
-
-    .metrics-list {
-      flex: 1;
+    /* Columna 3: Las 4 Métricas Atmosféricas del Redmi */
+    .metrics-lite-col {
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      padding: 6px 12px;
-      gap: 5px;
+      flex: 1;
+      padding: 5px 6px;
+      gap: 4px;
     }
 
-    .metric-row {
+    .metric-card-lite {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -447,139 +427,36 @@
       background: var(--tile-bg);
       border: 1.5px solid var(--border-light);
       border-radius: 10px;
-      padding: 0 12px;
+      padding: 0 10px;
     }
 
-    .metric-left {
+    .metric-lite-left {
       display: flex;
       align-items: center;
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: var(--text-main);
+      gap: 8px;
     }
 
     .metric-icon {
-      width: 32px;
-      height: 32px;
+      width: 24px;
+      height: 24px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      margin-right: 12px;
       color: var(--text-main);
     }
 
-    .metric-right {
-      font-size: 1.55rem;
-      font-weight: 800;
-      letter-spacing: -0.01em;
-    }
-
-    /* Columna 3: Previsión 7 Días - Elástica y sin desbordes con cualquier fuente */
-    .card-right {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      padding: 6px 8px;
-      gap: 5px;
-      overflow: hidden;
-    }
-
-    .forecast-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex: 1;
-      background: var(--tile-bg);
-      border: 1.5px solid var(--border-light);
-      border-radius: 10px;
-      padding: 0 8px;
-      gap: 6px;
-      overflow: hidden;
-    }
-
-    .forecast-day-group {
-      display: flex;
-      align-items: center;
-      flex: 1;
-      min-width: 0;
-      overflow: hidden;
-    }
-
-    .forecast-icon {
-      width: 32px;
-      height: 32px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      margin-right: 8px;
-      flex-shrink: 0;
-    }
-
-    .forecast-day-name {
-      display: flex;
-      flex-direction: column;
-      min-width: 0;
-      overflow: hidden;
-    }
-
-    .day-label {
-      font-size: 1.05rem;
-      font-weight: 800;
-      color: var(--text-main);
-      line-height: 1.1;
-      white-space: nowrap;
-    }
-
-    .day-sub {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      font-weight: 800;
-    }
-
-    .day-condition-desc {
-      font-size: 0.78rem;
-      font-weight: 600;
-      color: var(--text-muted);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .forecast-rain-col {
-      min-width: 52px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 4px;
-      flex-shrink: 0;
-    }
-
-    .forecast-rain-prob {
-      display: inline-flex;
-      align-items: center;
+    .metric-lite-label {
       font-size: 0.85rem;
       font-weight: 800;
-      color: var(--text-main);
-      background: var(--badge-bg);
-      padding: 1px 6px;
-      border-radius: 6px;
-      border: 1.5px solid var(--badge-border);
-      white-space: nowrap;
+      color: var(--text-muted);
+      letter-spacing: 0.03em;
     }
 
-    .forecast-rain-prob svg {
-      margin-right: 2px;
-      width: 12px;
-      height: 12px;
-    }
-
-    .forecast-temp {
-      font-size: 1.15rem;
+    .metric-lite-value {
+      font-size: 1.6rem;
       font-weight: 800;
-      letter-spacing: -0.02em;
-      white-space: nowrap;
-      text-align: right;
-      flex-shrink: 0;
+      color: var(--text-main);
+      letter-spacing: -0.01em;
     }
 
     /* SVG Stroke & Fill */
@@ -888,13 +765,13 @@
       </div>
     </div>
 
-    <!-- Contenedor de 3 Columnas -->
+    <!-- Contenedor de 3 Columnas Lite para Redmi 4X -->
     <div class="dashboard-grid">
 
-      <!-- COLUMNA 1: Reloj digital grande, Clima hoy, Sensación & Horas, Sol -->
+      <!-- COLUMNA 1: Reloj Digital Grande, Fecha y Amanecer/Atardecer -->
       <div class="card card-left">
         <div class="left-section-top">
-          <div class="header-date" id="txt-header-date">Lun 2026-10-01</div>
+          <div class="header-date" id="txt-header-date">JUEVES 1 DE OCTUBRE</div>
 
           <!-- Reloj 7 Segmentos SVG Grande -->
           <div class="svg-clock" id="svg-clock">
@@ -907,26 +784,66 @@
             <svg class="clock-digit" id="digit-m1" viewBox="0 0 60 100"></svg>
             <svg class="clock-digit" id="digit-m2" viewBox="0 0 60 100"></svg>
           </div>
+        </div>
 
-          <!-- Clima actual y rango -->
-          <div class="current-condition-row">
+        <div class="divider"></div>
+
+        <!-- Amanecer & Atardecer -->
+        <div class="left-section-bottom">
+          <div class="sun-time">
+            <svg class="ink-stroke" viewBox="0 0 24 24">
+              <path d="M17 18a5 5 0 0 0-10 0"/>
+              <line x1="12" y1="2" x2="12" y2="9"/>
+              <line x1="4.22" y1="10.22" x2="5.64" y2="11.64"/>
+              <line x1="1" y1="18" x2="3" y2="18"/>
+              <line x1="21" y1="18" x2="23" y2="18"/>
+              <line x1="18.36" y1="11.64" x2="19.78" y2="10.22"/>
+              <polyline points="9 5 12 2 15 5"/>
+            </svg>
+            <div style="display:flex;flex-direction:column;text-align:left">
+              <span style="font-size:0.85rem;font-weight:800;color:var(--text-muted);letter-spacing:0.04em">AMANECER</span>
+              <span id="txt-sunrise" style="font-size:1.75rem;font-weight:800;line-height:1">--:--</span>
+            </div>
+          </div>
+          <div class="sun-time">
+            <svg class="ink-stroke" viewBox="0 0 24 24">
+              <path d="M17 18a5 5 0 0 0-10 0"/>
+              <line x1="12" y1="9" x2="12" y2="2"/>
+              <line x1="4.22" y1="10.22" x2="5.64" y2="11.64"/>
+              <line x1="1" y1="18" x2="3" y2="18"/>
+              <line x1="21" y1="18" x2="23" y2="18"/>
+              <line x1="18.36" y1="11.64" x2="19.78" y2="10.22"/>
+              <polyline points="9 6 12 9 15 6"/>
+            </svg>
+            <div style="display:flex;flex-direction:column;text-align:left">
+              <span style="font-size:0.85rem;font-weight:800;color:var(--text-muted);letter-spacing:0.04em">ATARDECER</span>
+              <span id="txt-sunset" style="font-size:1.75rem;font-weight:800;line-height:1">--:--</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COLUMNA 2: Clima Actual y Próximas 4 Horas -->
+      <div class="card card-middle">
+        <div class="weather-center-box">
+          <div class="weather-hero-row">
             <div class="weather-main-icon" id="icon-weather-main"></div>
-            <div class="weather-main-info">
-              <div class="condition-text" id="txt-condition">Nublado</div>
-              <div class="temp-range-text" id="txt-temp-range">--/--°C</div>
+            <div class="weather-temp-main" id="txt-temp-current">--°</div>
+          </div>
+          <div class="weather-details-row">
+            <div class="condition-text" id="txt-condition">Despejado</div>
+            <div class="weather-sub-info">
+              <div>Sensación <span id="txt-feels-like">--°</span></div>
+              <div>•</div>
+              <div>Hoy <span id="txt-temp-range">--°/--°</span></div>
             </div>
           </div>
         </div>
 
         <div class="divider"></div>
 
-        <!-- Sensación Térmica & Próximas Horas (sustituye interior/exterior) -->
-        <div class="left-section-middle">
-          <div class="feels-like-bar">
-            <span class="feels-label">Sensación térmica</span>
-            <span class="feels-val" id="txt-feels-like">--.-°C</span>
-          </div>
-
+        <div class="hourly-center-box">
+          <div class="hourly-title">Próximas horas</div>
           <div class="hourly-forecast-row" id="hourly-forecast-box">
             <div class="hourly-item">
               <span class="hourly-time">--:--</span>
@@ -950,154 +867,70 @@
             </div>
           </div>
         </div>
-
-        <div class="divider"></div>
-
-        <!-- Amanecer & Atardecer -->
-        <div class="left-section-bottom">
-          <div class="sun-time">
-            <svg class="ink-stroke" width="42" height="42" viewBox="0 0 24 24">
-              <path d="M17 18a5 5 0 0 0-10 0"/>
-              <line x1="12" y1="2" x2="12" y2="9"/>
-              <line x1="4.22" y1="10.22" x2="5.64" y2="11.64"/>
-              <line x1="1" y1="18" x2="3" y2="18"/>
-              <line x1="21" y1="18" x2="23" y2="18"/>
-              <line x1="18.36" y1="11.64" x2="19.78" y2="10.22"/>
-              <polyline points="9 5 12 2 15 5"/>
-            </svg>
-            <div style="display:flex;flex-direction:column;text-align:left">
-              <span style="font-size:0.85rem;font-weight:800;color:var(--text-muted);letter-spacing:0.04em">AMANECER</span>
-              <span id="txt-sunrise" style="font-size:1.75rem;font-weight:800;line-height:1">--:--</span>
-            </div>
-          </div>
-          <div class="sun-time">
-            <svg class="ink-stroke" width="42" height="42" viewBox="0 0 24 24">
-              <path d="M17 18a5 5 0 0 0-10 0"/>
-              <line x1="12" y1="9" x2="12" y2="2"/>
-              <line x1="4.22" y1="10.22" x2="5.64" y2="11.64"/>
-              <line x1="1" y1="18" x2="3" y2="18"/>
-              <line x1="21" y1="18" x2="23" y2="18"/>
-              <line x1="18.36" y1="11.64" x2="19.78" y2="10.22"/>
-              <polyline points="9 6 12 9 15 6"/>
-            </svg>
-            <div style="display:flex;flex-direction:column;text-align:left">
-              <span style="font-size:0.85rem;font-weight:800;color:var(--text-muted);letter-spacing:0.04em">ATARDECER</span>
-              <span id="txt-sunset" style="font-size:1.75rem;font-weight:800;line-height:1">--:--</span>
-            </div>
-          </div>
-        </div>
       </div>
 
-      <!-- COLUMNA 2: Calidad del aire y Métricas atmosféricas modificadas -->
-      <div class="card card-middle">
-        <div class="air-top-row">
-          <div class="air-col">
-            <span class="air-label">ICA</span>
-            <span class="air-val" id="val-aqi">--</span>
-          </div>
-          <div class="air-col">
-            <span class="air-label">PM2.5</span>
-            <span class="air-val" id="val-pm25">--µg/m³</span>
-          </div>
-          <div class="air-col">
-            <span class="air-label">Polen</span>
-            <span class="air-val" id="val-pollen">Bajo</span>
-          </div>
-        </div>
-
-        <div class="divider"></div>
-
-        <div class="metrics-list">
-          <!-- 1: Humedad (reemplaza velocidad viento) -->
-          <div class="metric-row">
-            <div class="metric-left">
+      <!-- COLUMNA 3: 4 Métricas Atmosféricas de Redmi 4X -->
+      <div class="card card-right">
+        <div class="metrics-lite-col">
+          <!-- 1: Humedad -->
+          <div class="metric-card-lite">
+            <div class="metric-lite-left">
               <span class="metric-icon">
-                <svg class="ink-stroke" width="22" height="22" viewBox="0 0 24 24">
+                <svg class="ink-stroke" width="30" height="30" viewBox="0 0 24 24">
                   <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
                 </svg>
               </span>
-              <span>Humedad</span>
+              <span class="metric-lite-label">HUMEDAD</span>
             </div>
-            <div class="metric-right" id="val-humidity">--%</div>
+            <div class="metric-lite-value" id="val-humidity">--%</div>
           </div>
 
-          <!-- 2: Prob. precipitación hoy (reemplaza dirección viento) -->
-          <div class="metric-row">
-            <div class="metric-left">
+          <!-- 2: Probabilidad Ahora -->
+          <div class="metric-card-lite">
+            <div class="metric-lite-left">
               <span class="metric-icon">
-                <svg class="ink-stroke" width="22" height="22" viewBox="0 0 24 24">
-                  <path d="M23 12a11.05 11.05 0 0 0-22 0zm-5 7a3 3 0 0 1-6 0v-7"/>
-                </svg>
-              </span>
-              <span>Prob. precipitación hoy</span>
-            </div>
-            <div class="metric-right" id="val-pop-today">--%</div>
-          </div>
-
-          <!-- 3: Probabilidad ahora (reemplaza índice UV) -->
-          <div class="metric-row">
-            <div class="metric-left">
-              <span class="metric-icon">
-                <svg class="ink-stroke" width="22" height="22" viewBox="0 0 24 24">
+                <svg class="ink-stroke" width="30" height="30" viewBox="0 0 24 24">
                   <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
                   <line x1="8" y1="21" x2="8" y2="23"/>
                   <line x1="12" y1="21" x2="12" y2="23"/>
                   <line x1="16" y1="21" x2="16" y2="23"/>
                 </svg>
               </span>
-              <span>Probabilidad ahora</span>
+              <span class="metric-lite-label">PROB. AHORA</span>
             </div>
-            <div class="metric-right" id="val-pop-now">--%</div>
+            <div class="metric-lite-value" id="val-pop-now">--%</div>
           </div>
 
-          <!-- 4: Precipitación acumulada -->
-          <div class="metric-row">
-            <div class="metric-left">
+          <!-- 3: Prob. Máx Hoy -->
+          <div class="metric-card-lite">
+            <div class="metric-lite-left">
               <span class="metric-icon">
-                <svg class="ink-stroke" width="22" height="22" viewBox="0 0 24 24">
+                <svg class="ink-stroke" width="30" height="30" viewBox="0 0 24 24">
+                  <path d="M23 12a11.05 11.05 0 0 0-22 0zm-5 7a3 3 0 0 1-6 0v-7"/>
+                </svg>
+              </span>
+              <span class="metric-lite-label">PROB. MÁX HOY</span>
+            </div>
+            <div class="metric-lite-value" id="val-pop-today">--%</div>
+          </div>
+
+          <!-- 4: Precipitación Acumulada -->
+          <div class="metric-card-lite">
+            <div class="metric-lite-left">
+              <span class="metric-icon">
+                <svg class="ink-stroke" width="30" height="30" viewBox="0 0 24 24">
                   <path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25"/>
                   <line x1="8" y1="18" x2="8" y2="22"/>
                   <line x1="12" y1="18" x2="12" y2="22"/>
                   <line x1="16" y1="18" x2="16" y2="22"/>
                 </svg>
               </span>
-              <span>Precipitación</span>
+              <span class="metric-lite-label">PRECIPITACIÓN</span>
             </div>
-            <div class="metric-right" id="val-precip">0 mm</div>
-          </div>
-
-          <!-- 5: Visibilidad -->
-          <div class="metric-row">
-            <div class="metric-left">
-              <span class="metric-icon">
-                <svg class="ink-stroke" width="22" height="22" viewBox="0 0 24 24">
-                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                  <circle cx="12" cy="12" r="3"/>
-                </svg>
-              </span>
-              <span>Visibilidad</span>
-            </div>
-            <div class="metric-right" id="val-visibility">> 10 km</div>
-          </div>
-
-          <!-- 6: Presión barométrica (nivel del mar) -->
-          <div class="metric-row">
-            <div class="metric-left">
-              <span class="metric-icon">
-                <svg class="ink-stroke" width="22" height="22" viewBox="0 0 24 24">
-                  <path d="M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16z"/>
-                  <path d="M12 14l3-3"/>
-                </svg>
-              </span>
-              <span>Presión</span>
-            </div>
-            <div class="metric-right" id="val-pressure">1014 hPa</div>
+            <div class="metric-lite-value" id="val-precip">0.0 mm</div>
           </div>
         </div>
       </div>
-
-      <!-- COLUMNA 3: Previsión 7 Días Grande -->
-      <div class="card card-right" id="forecast-card"></div>
 
     </div>
   </div>
@@ -1270,8 +1103,7 @@
     };
 
     var DAYS_FULL_ES = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
-    var DAYS_SHORT_ES = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
-    var DAYS_ES = DAYS_FULL_ES;
+    var MONTHS_ES = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 
     /* --- MOTOR DEL RELOJ DE 7 SEGMENTOS --- */
     var SEG_MAP = {
@@ -1386,13 +1218,10 @@
       setDigit(document.getElementById('digit-m1'), mStr.charAt(0));
       setDigit(document.getElementById('digit-m2'), mStr.charAt(1));
 
-      var y = now.getFullYear();
-      var mo = now.getMonth() + 1;
-      var moStr = (mo < 10 ? '0' : '') + mo;
       var d = now.getDate();
-      var dStr = (d < 10 ? '0' : '') + d;
       var dayName = DAYS_FULL_ES[now.getDay()];
-      document.getElementById('txt-header-date').textContent = dayName + ', ' + dStr + '.' + moStr + '.' + y;
+      var monthName = MONTHS_ES[now.getMonth()];
+      document.getElementById('txt-header-date').textContent = dayName.toUpperCase() + ' ' + d + ' DE ' + monthName.toUpperCase();
 
       // Actualizar tema automáticamente según la hora actual
       updateTheme();
@@ -1413,46 +1242,35 @@
       }
     }
 
-    /* --- PETICIÓN HTTP ROBUSTA CON ANDROID BRIDGE --- */
+    /* --- PETICIÓN HTTP ROBUSTA CON FALLBACK --- */
     function requestJson(url) {
-      if (window.AndroidBridge && typeof window.AndroidBridge.httpGet === 'function') {
-        return new Promise(function(resolve, reject) {
+      return fetch(url, { cache: "no-store" }).then(function(r) {
+        if (!r.ok) throw new Error("HTTP error " + r.status);
+        return r.json();
+      }).catch(function(fetchErr) {
+        if (window.AndroidBridge && typeof window.AndroidBridge.httpGet === 'function') {
           try {
             var raw = window.AndroidBridge.httpGet(url);
-            if (raw) {
-              resolve(JSON.parse(raw));
-            } else {
-              reject(new Error("Bridge response empty"));
-            }
-          } catch (e) {
-            reject(e);
-          }
-        });
-      }
-      return fetch(url).then(function(r) { return r.json(); });
+            if (raw) return JSON.parse(raw);
+          } catch (_) {}
+        }
+        throw fetchErr;
+      });
     }
 
-    /* --- CARGA DEL CLIMA --- */
+    /* --- CARGA DEL CLIMA LITE (OPEN-METEO) --- */
     function fetchWeather(lat, lon) {
       var forecastUrl = 'https://api.open-meteo.com/v1/forecast?latitude=' + lat + '&longitude=' + lon
-        + '&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,precipitation_probability,weather_code,pressure_msl'
-        + '&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,precipitation_sum,sunrise,sunset'
-        + '&hourly=temperature_2m,weather_code,precipitation_probability,visibility'
-        + '&forecast_days=7&past_days=1&timezone=auto';
+        + '&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,precipitation_probability,weather_code'
+        + '&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset'
+        + '&hourly=temperature_2m,weather_code,precipitation_probability'
+        + '&forecast_days=2&past_days=1&timezone=auto';
 
-      var airUrl = 'https://air-quality-api.open-meteo.com/v1/air-quality?latitude=' + lat + '&longitude=' + lon
-        + '&current=european_aqi,pm2_5';
-
-      var p1 = requestJson(forecastUrl).catch(function() { return null; });
-      var p2 = requestJson(airUrl).catch(function() { return null; });
-
-      return Promise.all([p1, p2]).then(function(results) {
-        var forecast = results[0];
-        var air = results[1];
+      return requestJson(forecastUrl).then(function(forecast) {
         if (!forecast || !forecast.current) {
           throw new Error("No se pudo obtener el pronóstico");
         }
-        return { forecast: forecast, air: air, ts: Date.now() };
+        return { forecast: forecast, ts: Date.now() };
       });
     }
 
@@ -1477,6 +1295,10 @@
       var wInfo = WMO_SPANISH[code] || ["Despejado", SVG_ICONS.sun];
       document.getElementById('txt-condition').textContent = wInfo[0];
       document.getElementById('icon-weather-main').innerHTML = wInfo[1];
+      var curTemp = (c.temperature_2m !== undefined && c.temperature_2m !== null)
+        ? Math.round(c.temperature_2m) : '--';
+      var elCurTemp = document.getElementById('txt-temp-current');
+      if (elCurTemp) elCurTemp.textContent = curTemp + '°';
 
       var tMaxToday = (d.temperature_2m_max && d.temperature_2m_max[1] !== undefined)
         ? Math.round(d.temperature_2m_max[1])
@@ -1484,13 +1306,15 @@
       var tMinToday = (d.temperature_2m_min && d.temperature_2m_min[1] !== undefined)
         ? Math.round(d.temperature_2m_min[1])
         : ((d.temperature_2m_min && d.temperature_2m_min[0] !== undefined) ? Math.round(d.temperature_2m_min[0]) : '--');
-      document.getElementById('txt-temp-range').textContent = tMaxToday + '/' + tMinToday + '°C';
+      var elTempRange = document.getElementById('txt-temp-range');
+      if (elTempRange) elTempRange.textContent = tMaxToday + '° / ' + tMinToday + '°';
 
       // Sensación Térmica
       var feelsLike = (c.apparent_temperature !== undefined && c.apparent_temperature !== null)
-        ? c.apparent_temperature.toFixed(1)
-        : ((c.temperature_2m !== undefined && c.temperature_2m !== null) ? c.temperature_2m.toFixed(1) : '--.-');
-      document.getElementById('txt-feels-like').textContent = feelsLike + '°C';
+        ? Math.round(c.apparent_temperature)
+        : ((c.temperature_2m !== undefined && c.temperature_2m !== null) ? Math.round(c.temperature_2m) : '--');
+      var elFeels = document.getElementById('txt-feels-like');
+      if (elFeels) elFeels.textContent = feelsLike + '°';
 
       // Mini-Previsión por horas (Próximas 4 horas)
       renderHourlyMini(h);
@@ -1499,70 +1323,41 @@
       if (d.sunrise && d.sunrise[1]) {
         todaySunriseStr = d.sunrise[1];
         var sr = d.sunrise[1].split('T')[1] || '--:--';
-        document.getElementById('txt-sunrise').textContent = sr;
+        var elSr = document.getElementById('txt-sunrise');
+        if (elSr) elSr.textContent = sr;
       }
       if (d.sunset && d.sunset[1]) {
         todaySunsetStr = d.sunset[1];
         var ss = d.sunset[1].split('T')[1] || '--:--';
-        document.getElementById('txt-sunset').textContent = ss;
+        var elSs = document.getElementById('txt-sunset');
+        if (elSs) elSs.textContent = ss;
       }
       updateTheme();
 
-      // Columna 2: Calidad del Aire
-      var aqiVal = (air && air.current && air.current.european_aqi !== undefined && air.current.european_aqi !== null)
-        ? Math.round(air.current.european_aqi) : 34;
-      var pm25Val = (air && air.current && air.current.pm2_5 !== undefined && air.current.pm2_5 !== null)
-        ? Math.round(air.current.pm2_5) : 12;
-      document.getElementById('val-aqi').textContent = aqiVal;
-      document.getElementById('val-pm25').textContent = pm25Val + 'µg/m³';
-
-      var pollenText = "Bajo";
-      if (aqiVal > 50 || (c.weather_code === 0 && (new Date().getMonth() >= 2 && new Date().getMonth() <= 5))) {
-        pollenText = "Moderado";
-      }
-      document.getElementById('val-pollen').textContent = pollenText;
-
-      // MÉTRICAS MODIFICADAS SOLICITADAS:
+      // MÉTRICAS REDMI 4X LITE:
       // 1. Humedad
       var humVal = (c.relative_humidity_2m !== undefined && c.relative_humidity_2m !== null)
         ? Math.round(c.relative_humidity_2m) : '--';
-      document.getElementById('val-humidity').textContent = humVal + '%';
+      var elHum = document.getElementById('val-humidity');
+      if (elHum) elHum.textContent = humVal + '%';
 
-      // 2. Prob. precipitación hoy
-      var popToday = (d.precipitation_probability_max && d.precipitation_probability_max[1] !== undefined)
-        ? d.precipitation_probability_max[1] : 0;
-      document.getElementById('val-pop-today').textContent = popToday + '%';
-
-      // 3. Probabilidad ahora
+      // 2. Probabilidad ahora
       var popNow = (c.precipitation_probability !== undefined && c.precipitation_probability !== null)
         ? c.precipitation_probability
         : (getHourlyPopNow(h) || 0);
-      document.getElementById('val-pop-now').textContent = popNow + '%';
+      var elPopNow = document.getElementById('val-pop-now');
+      if (elPopNow) elPopNow.textContent = popNow + '%';
+
+      // 3. Prob. precipitación hoy (máxima)
+      var popToday = (d.precipitation_probability_max && d.precipitation_probability_max[1] !== undefined)
+        ? d.precipitation_probability_max[1] : 0;
+      var elPopToday = document.getElementById('val-pop-today');
+      if (elPopToday) elPopToday.textContent = popToday + '%';
 
       // 4. Precipitación
-      var precip = (c.precipitation !== undefined && c.precipitation !== null) ? Number(c.precipitation).toFixed(0) : '0';
-      document.getElementById('val-precip').textContent = precip + ' mm';
-
-      // 5. Visibilidad
-      var visText = "> 10 km";
-      if (h.visibility && h.visibility.length > 0) {
-        var currentVis = h.visibility[0];
-        if (currentVis < 1000) {
-          visText = Math.round(currentVis) + ' m';
-        } else if (currentVis < 9500) {
-          visText = (currentVis / 1000).toFixed(1) + ' km';
-        }
-      }
-      document.getElementById('val-visibility').textContent = visText;
-
-      // 6. Presión (nivel del mar pressure_msl o fallback surface_pressure)
-      var pres = (c.pressure_msl !== undefined && c.pressure_msl !== null)
-        ? Math.round(c.pressure_msl)
-        : ((c.surface_pressure !== undefined && c.surface_pressure !== null) ? Math.round(c.surface_pressure) : 1014);
-      document.getElementById('val-pressure').textContent = pres + ' hPa';
-
-      // Columna 3: Previsión 7 Días
-      renderForecast(d);
+      var precip = (c.precipitation !== undefined && c.precipitation !== null) ? Number(c.precipitation).toFixed(1) : '0.0';
+      var elPrecip = document.getElementById('val-precip');
+      if (elPrecip) elPrecip.textContent = precip + ' mm';
     }
 
     function getHourlyPopNow(h) {
@@ -1605,58 +1400,6 @@
           '<div class="hourly-icon">' + iconHtml + '</div>' +
           '<span class="hourly-temp">' + tVal + '°</span>';
         box.appendChild(col);
-      }
-    }
-
-    function renderForecast(daily) {
-      var container = document.getElementById('forecast-card');
-      if (!daily || !daily.time) return;
-
-      container.innerHTML = '';
-      var count = Math.min(7, daily.time.length);
-
-      for (var i = 0; i < count; i++) {
-        var dateStr = daily.time[i];
-        var dateObj = new Date(dateStr + 'T12:00:00');
-        var code = daily.weather_code ? daily.weather_code[i] : 0;
-        var wInfo = WMO_SPANISH[code] || ["Despejado", SVG_ICONS.sun];
-
-        var tMax = daily.temperature_2m_max ? Math.round(daily.temperature_2m_max[i]) : '--';
-        var tMin = daily.temperature_2m_min ? Math.round(daily.temperature_2m_min[i]) : '--';
-        var pop = daily.precipitation_probability_max ? daily.precipitation_probability_max[i] : 0;
-
-        var dayLabel = DAYS_SHORT_ES[dateObj.getDay()];
-        var daySub = "";
-
-        if (i === 0) {
-          daySub = "Ayer";
-        } else if (i === 1) {
-          daySub = "Hoy";
-        }
-
-        var rainBadge = pop >= 30 ? (
-          '<span class="forecast-rain-prob" title="Probabilidad de lluvia ' + pop + '%">' +
-            '<svg class="ink-stroke" width="14" height="14" viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>' +
-            pop + '%' +
-          '</span>'
-        ) : '';
-
-        var condDesc = wInfo[0];
-        var row = document.createElement('div');
-        row.className = 'forecast-row';
-        row.innerHTML =
-          '<div class="forecast-day-group">' +
-            '<div class="forecast-icon">' + wInfo[1] + '</div>' +
-            '<div class="forecast-day-name">' +
-              '<span class="day-label">' + dayLabel + (daySub ? ' <small style="font-size:0.72em;color:var(--text-muted)">(' + daySub + ')</small>' : '') + '</span>' +
-              '<span class="day-condition-desc">' + condDesc + '</span>' +
-            '</div>' +
-          '</div>' +
-          '<div class="forecast-rain-col">' +
-            rainBadge +
-          '</div>' +
-          '<div class="forecast-temp">' + tMax + '° / ' + tMin + '°</div>';
-        container.appendChild(row);
       }
     }
 

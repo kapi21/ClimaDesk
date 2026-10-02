@@ -1,31 +1,32 @@
 # HANDOFF — ClimaDesk
 
-Última sesión: **2026-10-01** (cerrada)
+Última sesión: **2026-10-02** (cerrada)
 
 ## Estado
 - **Proyecto:** ClimaDesk (repo [kapi21/ClimaDesk](https://github.com/kapi21/ClimaDesk))
-- **Estrategia Multi-Dispositivo:** Tres ramas dedicadas y sus APKs independientes:
-  1. Rama **`tablet-galaxy-tab2`** → `apks/Climadesk-v1.8.apk` (Samsung Galaxy Tab 2 - Monocromo E-Ink)
-  2. Rama **`tablet-galaxy-tab2-color`** → `apks/Climadesk-Color-v1.8.apk` (Samsung Galaxy Tab 2 - E-Ink Color)
-  3. Rama **`redmi4x-lite`** → `apks/Climadesk-Lite-v1.8.apk` (Xiaomi Redmi 4X Lite)
+- **Estrategia Multi-Dispositivo:** Tres ramas dedicadas y sus APKs independientes centralizadas en GitHub Releases y carpeta `apks/`:
+  1. Rama **`tablet-galaxy-tab2-color`** → `apks/Climadesk-Color-v1.8.apk` (Galaxy Tab 2 — E-Ink Color)
+  2. Rama **`tablet-galaxy-tab2`** → `apks/Climadesk-v1.8.apk` (Galaxy Tab 2 — Monocromo E-Ink)
+  3. Rama **`redmi4x-lite`** → `apks/Climadesk-Lite-v1.8.apk` (Xiaomi Redmi 4X — Edición Lite 640x360 dp)
 - **Versión app:** `1.8-lite` (`versionCode` 10) en Redmi 4X / `1.8` (`versionCode` 9) en Tablet — package `es.climadesk.app`
+- **GitHub Release oficial:** [v1.8](https://github.com/kapi21/ClimaDesk/releases/tag/v1.8) con los 3 binarios disponibles para descarga directa.
 
-## Hecho en esta sesión
+## Hecho en esta sesión (2026-10-02)
 
-### 1. Tablet Samsung Galaxy Tab 2 (Rama `tablet-galaxy-tab2`)
-- **Estética SwitchBot E-Ink**: Diseño minimalista de 3 columnas con contraste nítido, sin elementos flotantes ni solapamientos.
-- **Previsión semanal 7 días**: Tarjetas con badges de probabilidad de lluvia, temperaturas máx/mín y descripción de condiciones.
-- **Compatibilidad Android 6.0**: Soporte para WebView Chromium 51 mediante bridge nativo SSL bypass para peticiones HTTPS de Open-Meteo.
-- **Selector de tipografías retro**: Soporte para Casio FX-115, Casio FX-9860, Dot Matrix, Amstrad CPC 464 y Retro Computer.
-- **Tema Día / Noche automático**: Cambio dinámico según la hora real de amanecer y atardecer calculada por Open-Meteo.
-- **Accesos directos del sistema**: Botones en panel de ajustes para abrir Ajustes de Android y Explorador de archivos nativo.
+### 1. Tablet Galaxy Tab 2 Color (Rama `tablet-galaxy-tab2-color`)
+- **Estética E-Ink Color**: Fondo blanco roto estilo papel de tinta electrónica (`#f4f1ea`), tarjetas limpias (`#fdfcf9`) y tipografía/números en negro puro (`#111111`).
+- **Elementos a color**: Sol ámbar (`#f57c00`), nubes slate (`#546e7a`), lluvia y prob. precipitación en azul (`#1976d2`), humedad en cian (`#0288d1`), indicadores térmicos máx/mín (`▲` rojo / `▼` azul) y termómetro de sensación térmica con mercurio rojo.
+- **Despliegue y verificación**: Instalado y probado con éxito en Galaxy Tab 2 (`c32063e15928a6f`).
 
-### 2. Xiaomi Redmi 4X Lite (Rama `redmi4x-lite`)
-- **Diseño Lite proporcional (640x360 dp)**: Ajuste exhaustivo de tipografías, alturas y paddings para encajar al 100% en la pantalla de 720p sin desbordes ni scroll.
-- **Columna 1 (Tiempo y Sol)**: Fecha completa en mayúsculas (`JUEVES 1 DE OCTUBRE`), reloj digital 7 segmentos gigante y tarjetas de Amanecer / Atardecer.
-- **Columna 2 (Clima Actual y 4 Horas)**: Temperatura actual destacada (ej. `23°`), condición, Sensación térmica, Rango Hoy y fila de próximas 4 horas.
-- **Columna 3 (4 Métricas Clave)**: Humedad (%), Probabilidad Ahora (%), Probabilidad Máx Hoy (%) y Precipitación (mm).
-- **Rendimiento ultra-ligero**: Petición Open-Meteo reducida a los datos necesarios (sin carga pesada de calidad del aire ni días sobrantes), `fetch()` nativo prioritario con fallback y puente `WebConsole` para depuración en logcat.
+### 2. Ordenación, Limpieza y Centralización de APKs
+- **Carpeta `apks/`**: Centralización de los 3 APKs compilados y documentación en `apks/README.md`.
+- **Nombres limpios**: Renombrados a `Climadesk-Color-v1.8.apk`, `Climadesk-v1.8.apk` y `Climadesk-Lite-v1.8.apk`.
+- **Limpieza de repo**: Eliminación de capturas de pantalla temporales y archivos residuales de la raíz.
+- **Capturas actualizadas**: Sustitución de preview antigua en `docs/` y `README.md` por capturas reales de Tablet (`tablet-preview.png`) y Redmi 4X (`redmi-preview.png`).
+
+### 3. Publicación Oficial en GitHub Releases
+- Creación de la Release oficial **`v1.8`** con `gh release create` vinculando los 3 APKs para descarga de 1 toque.
+- Enlaces de descarga directa integrados en el `README.md` de la rama `main`.
 
 ## Archivos clave y APKs
 - `kiosk-app/app/src/main/assets/index.html` (interfaz, reloj SVG, cálculo de tema, selectores)

@@ -6,9 +6,20 @@ ClimaDesk convierte un smartphone antiguo en un **dashboard de escritorio**: rel
 
 Pensado para dejarlo apoyado en la mesa, cargando, y echarle un vistazo de un golpe de ojo: hora, fecha, temperatura, sensación térmica y un mini-pronóstico.
 
-![ClimaDesk en un móvil en horizontal](docs/climadesk-preview.png)
+### 📱 Tablet (Samsung Galaxy Tab 2) — E-Ink Color Dashboard
+![ClimaDesk Tablet E-Ink Color](docs/tablet-preview.png)
+
+### 📲 Smartphone (Xiaomi Redmi 4X) — Lite Dashboard
+![ClimaDesk Redmi 4X Lite](docs/redmi-preview.png)
 
 ---
+
+## APKs Listas para Instalar
+
+En la carpeta [`apks/`](apks/) dispones de las compilaciones directas:
+- **`apks/app-tablet-color-debug.apk`**: Versión Galaxy Tab 2 — E-Ink Color (fondo blanco roto + elementos a color).
+- **`apks/app-tablet-debug.apk`**: Versión Galaxy Tab 2 — E-Ink Monocromo.
+- **`apks/app-redmi-debug.apk`**: Versión Xiaomi Redmi 4X — Edición Lite 640x360 dp.
 
 ## ¿Para qué sirve?
 

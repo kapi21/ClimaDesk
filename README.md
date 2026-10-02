@@ -14,12 +14,13 @@ Pensado para dejarlo apoyado en la mesa, cargando, y echarle un vistazo de un go
 
 ---
 
-## APKs Listas para Instalar
+## 📥 Descargas y APKs Listas
 
-En la carpeta [`apks/`](apks/) dispones de las compilaciones directas:
-- **`apks/app-tablet-color-debug.apk`**: Versión Galaxy Tab 2 — E-Ink Color (fondo blanco roto + elementos a color).
-- **`apks/app-tablet-debug.apk`**: Versión Galaxy Tab 2 — E-Ink Monocromo.
-- **`apks/app-redmi-debug.apk`**: Versión Xiaomi Redmi 4X — Edición Lite 640x360 dp.
+Descárgalas directamente en tu dispositivo desde [**GitHub Releases (v1.8)**](https://github.com/kapi21/ClimaDesk/releases/tag/v1.8) o encuéntralas en la carpeta local [`apks/`](apks/):
+
+- 🎨 [**app-tablet-color-debug.apk**](https://github.com/kapi21/ClimaDesk/releases/download/v1.8/app-tablet-color-debug.apk): Galaxy Tab 2 (E-Ink Color — fondo blanco roto, sol, lluvia y temperatura a color).
+- 📜 [**app-tablet-debug.apk**](https://github.com/kapi21/ClimaDesk/releases/download/v1.8/app-tablet-debug.apk): Galaxy Tab 2 (E-Ink Monocromo original).
+- 📱 [**app-redmi-debug.apk**](https://github.com/kapi21/ClimaDesk/releases/download/v1.8/app-redmi-debug.apk): Xiaomi Redmi 4X (Edición Lite compacta 640x360 dp para pantallas 720p).
 
 ## ¿Para qué sirve?
 

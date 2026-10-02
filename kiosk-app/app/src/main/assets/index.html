@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
-  <meta name="theme-color" content="#f4f3ef" />
-  <title>SwitchBot E-Ink Dashboard</title>
+  <meta name="theme-color" content="#f4f1ea" />
+  <title>SwitchBot E-Ink Color Dashboard</title>
   <style>
     @font-face {
       font-family: 'Casio115';
@@ -28,30 +28,30 @@
     }
 
     :root {
-      --bg: #eceae3;
-      --card-bg: #fdfdfc;
-      --tile-bg: #faf8f2;
+      --bg: #f4f1ea;
+      --card-bg: #fdfcf9;
+      --tile-bg: #faf7f0;
       --border-ink: #222222;
-      --border-light: #dcd9d0;
-      --text-main: #141414;
-      --text-muted: #525252;
-      --text-faint: #807f7a;
-      --badge-bg: #dfded7;
-      --badge-border: #222222;
+      --border-light: #dfdbcf;
+      --text-main: #111111;
+      --text-muted: #555555;
+      --text-faint: #888880;
+      --badge-bg: #e1f5fe;
+      --badge-border: #81d4fa;
       --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     }
 
     body.night {
-      --bg: #101114;
-      --card-bg: #18191e;
-      --tile-bg: #22242c;
-      --border-ink: #464a58;
-      --border-light: #2d303b;
-      --text-main: #f4f3ef;
-      --text-muted: #a0a4b2;
-      --text-faint: #656977;
-      --badge-bg: #2d303c;
-      --badge-border: #525666;
+      --bg: #121418;
+      --card-bg: #1a1d24;
+      --tile-bg: #222630;
+      --border-ink: #484e5e;
+      --border-light: #2c313d;
+      --text-main: #f5f5f5;
+      --text-muted: #a4abb8;
+      --text-faint: #6c7382;
+      --badge-bg: #102a45;
+      --badge-border: #1976d2;
     }
 
     body.night .seg.off {
@@ -559,7 +559,7 @@
       align-items: center;
       font-size: 0.85rem;
       font-weight: 800;
-      color: var(--text-main);
+      color: #0d47a1;
       background: var(--badge-bg);
       padding: 1px 6px;
       border-radius: 6px;
@@ -567,10 +567,14 @@
       white-space: nowrap;
     }
 
+    body.night .forecast-rain-prob {
+      color: #90caf9;
+    }
+
     .forecast-rain-prob svg {
-      margin-right: 2px;
-      width: 12px;
-      height: 12px;
+      margin-right: 3px;
+      width: 13px;
+      height: 13px;
     }
 
     .forecast-temp {
@@ -580,6 +584,7 @@
       white-space: nowrap;
       text-align: right;
       flex-shrink: 0;
+      color: var(--text-main);
     }
 
     /* SVG Stroke & Fill */
@@ -819,9 +824,9 @@
       <div class="top-left">
         <div class="location-badge" id="btn-city-change" title="Toca para cambiar de ciudad">
           <!-- Icono Pin SVG -->
-          <svg class="ink-stroke" width="20" height="20" viewBox="0 0 24 24">
-            <path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7z"/>
-            <circle cx="12" cy="9" r="2.5"/>
+          <svg width="20" height="20" viewBox="0 0 24 24">
+            <path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7z" fill="#ffebee" stroke="#d32f2f" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="12" cy="9" r="2.5" fill="#d32f2f"/>
           </svg>
           <span id="label-city">Madrid</span>
         </div>
@@ -832,15 +837,15 @@
         <!-- Selector Modo Día/Noche -->
         <span class="status-icon" id="btn-theme-toggle" title="Modo Día / Noche (Auto)">
           <svg class="ink-stroke" width="20" height="20" viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="5"/>
-            <line x1="12" y1="1" x2="12" y2="3"/>
-            <line x1="12" y1="21" x2="12" y2="23"/>
-            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
-            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-            <line x1="1" y1="12" x2="3" y2="12"/>
-            <line x1="21" y1="12" x2="23" y2="12"/>
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
-            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            <circle cx="12" cy="12" r="5" fill="#ffe082" stroke="#f57c00"/>
+            <line x1="12" y1="1" x2="12" y2="3" stroke="#f57c00"/>
+            <line x1="12" y1="21" x2="12" y2="23" stroke="#f57c00"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="#f57c00"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="#f57c00"/>
+            <line x1="1" y1="12" x2="3" y2="12" stroke="#f57c00"/>
+            <line x1="21" y1="12" x2="23" y2="12" stroke="#f57c00"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="#f57c00"/>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="#f57c00"/>
           </svg>
         </span>
         <!-- Botón Auto-Localización GPS/IP -->
@@ -870,19 +875,19 @@
         </span>
         <!-- Icono Wi-Fi -->
         <span class="status-icon" id="wifi-icon" title="Wi-Fi">
-          <svg class="ink-stroke" width="19" height="19" viewBox="0 0 24 24">
-            <path d="M5 12.55a11 11 0 0 1 14.08 0"/>
-            <path d="M1.42 9a16 16 0 0 1 21.16 0"/>
-            <path d="M8.53 16.11a6 6 0 0 1 6.95 0"/>
-            <line x1="12" y1="20" x2="12.01" y2="20"/>
+          <svg width="19" height="19" viewBox="0 0 24 24">
+            <path d="M5 12.55a11 11 0 0 1 14.08 0" stroke="#1976d2" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+            <path d="M1.42 9a16 16 0 0 1 21.16 0" stroke="#1976d2" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+            <path d="M8.53 16.11a6 6 0 0 1 6.95 0" stroke="#1976d2" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+            <circle cx="12" cy="20" r="1.5" fill="#1976d2"/>
           </svg>
         </span>
         <!-- Icono Batería -->
         <span class="status-icon" id="battery-box" title="Batería">
-          <svg class="ink-stroke" width="22" height="18" viewBox="0 0 26 24">
-            <rect x="1" y="6" width="20" height="12" rx="2" ry="2"/>
-            <line x1="23" y1="10" x2="23" y2="14"/>
-            <rect id="bat-level" x="3" y="8" width="14" height="8" fill="var(--text-main)" stroke="none"/>
+          <svg width="22" height="18" viewBox="0 0 26 24">
+            <rect x="1" y="6" width="20" height="12" rx="2" ry="2" stroke="var(--text-main)" stroke-width="2" fill="none"/>
+            <line x1="23" y1="10" x2="23" y2="14" stroke="var(--text-main)" stroke-width="2" stroke-linecap="round"/>
+            <rect id="bat-level" x="3" y="8" width="14" height="8" fill="#2e7d32" stroke="none"/>
           </svg>
         </span>
       </div>
@@ -923,7 +928,13 @@
         <!-- Sensación Térmica & Próximas Horas (sustituye interior/exterior) -->
         <div class="left-section-middle">
           <div class="feels-like-bar">
-            <span class="feels-label">Sensación térmica</span>
+            <span class="feels-label" style="display:flex;align-items:center;gap:8px">
+              <svg width="22" height="22" viewBox="0 0 24 24">
+                <path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z" fill="#ffebee" stroke="#d32f2f" stroke-width="2.2"/>
+                <circle cx="11.5" cy="16.5" r="2.2" fill="#d32f2f"/>
+              </svg>
+              Sensación térmica
+            </span>
             <span class="feels-val" id="txt-feels-like">--.-°C</span>
           </div>
 
@@ -956,33 +967,33 @@
         <!-- Amanecer & Atardecer -->
         <div class="left-section-bottom">
           <div class="sun-time">
-            <svg class="ink-stroke" width="42" height="42" viewBox="0 0 24 24">
-              <path d="M17 18a5 5 0 0 0-10 0"/>
-              <line x1="12" y1="2" x2="12" y2="9"/>
-              <line x1="4.22" y1="10.22" x2="5.64" y2="11.64"/>
-              <line x1="1" y1="18" x2="3" y2="18"/>
-              <line x1="21" y1="18" x2="23" y2="18"/>
-              <line x1="18.36" y1="11.64" x2="19.78" y2="10.22"/>
-              <polyline points="9 5 12 2 15 5"/>
+            <svg width="42" height="42" viewBox="0 0 24 24">
+              <path d="M17 18a5 5 0 0 0-10 0" fill="#ffe082" stroke="#f57c00" stroke-width="2.3"/>
+              <line x1="12" y1="2" x2="12" y2="9" stroke="#f57c00" stroke-width="2.3" stroke-linecap="round"/>
+              <line x1="4.22" y1="10.22" x2="5.64" y2="11.64" stroke="#f57c00" stroke-width="2.3" stroke-linecap="round"/>
+              <line x1="1" y1="18" x2="3" y2="18" stroke="#78909c" stroke-width="2.3" stroke-linecap="round"/>
+              <line x1="21" y1="18" x2="23" y2="18" stroke="#78909c" stroke-width="2.3" stroke-linecap="round"/>
+              <line x1="18.36" y1="11.64" x2="19.78" y2="10.22" stroke="#f57c00" stroke-width="2.3" stroke-linecap="round"/>
+              <polyline points="9 5 12 2 15 5" fill="none" stroke="#2e7d32" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
             <div style="display:flex;flex-direction:column;text-align:left">
               <span style="font-size:0.85rem;font-weight:800;color:var(--text-muted);letter-spacing:0.04em">AMANECER</span>
-              <span id="txt-sunrise" style="font-size:1.75rem;font-weight:800;line-height:1">--:--</span>
+              <span id="txt-sunrise" style="font-size:1.75rem;font-weight:800;line-height:1;color:var(--text-main)">--:--</span>
             </div>
           </div>
           <div class="sun-time">
-            <svg class="ink-stroke" width="42" height="42" viewBox="0 0 24 24">
-              <path d="M17 18a5 5 0 0 0-10 0"/>
-              <line x1="12" y1="9" x2="12" y2="2"/>
-              <line x1="4.22" y1="10.22" x2="5.64" y2="11.64"/>
-              <line x1="1" y1="18" x2="3" y2="18"/>
-              <line x1="21" y1="18" x2="23" y2="18"/>
-              <line x1="18.36" y1="11.64" x2="19.78" y2="10.22"/>
-              <polyline points="9 6 12 9 15 6"/>
+            <svg width="42" height="42" viewBox="0 0 24 24">
+              <path d="M17 18a5 5 0 0 0-10 0" fill="#ffcc80" stroke="#e64a19" stroke-width="2.3"/>
+              <line x1="12" y1="9" x2="12" y2="2" stroke="#e64a19" stroke-width="2.3" stroke-linecap="round"/>
+              <line x1="4.22" y1="10.22" x2="5.64" y2="11.64" stroke="#e64a19" stroke-width="2.3" stroke-linecap="round"/>
+              <line x1="1" y1="18" x2="3" y2="18" stroke="#78909c" stroke-width="2.3" stroke-linecap="round"/>
+              <line x1="21" y1="18" x2="23" y2="18" stroke="#78909c" stroke-width="2.3" stroke-linecap="round"/>
+              <line x1="18.36" y1="11.64" x2="19.78" y2="10.22" stroke="#e64a19" stroke-width="2.3" stroke-linecap="round"/>
+              <polyline points="9 6 12 9 15 6" fill="none" stroke="#c62828" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
             <div style="display:flex;flex-direction:column;text-align:left">
               <span style="font-size:0.85rem;font-weight:800;color:var(--text-muted);letter-spacing:0.04em">ATARDECER</span>
-              <span id="txt-sunset" style="font-size:1.75rem;font-weight:800;line-height:1">--:--</span>
+              <span id="txt-sunset" style="font-size:1.75rem;font-weight:800;line-height:1;color:var(--text-main)">--:--</span>
             </div>
           </div>
         </div>
@@ -1012,8 +1023,8 @@
           <div class="metric-row">
             <div class="metric-left">
               <span class="metric-icon">
-                <svg class="ink-stroke" width="22" height="22" viewBox="0 0 24 24">
-                  <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+                <svg width="22" height="22" viewBox="0 0 24 24">
+                  <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" fill="#b3e5fc" stroke="#0288d1" stroke-width="2.2" stroke-linejoin="round"/>
                 </svg>
               </span>
               <span>Humedad</span>
@@ -1025,8 +1036,9 @@
           <div class="metric-row">
             <div class="metric-left">
               <span class="metric-icon">
-                <svg class="ink-stroke" width="22" height="22" viewBox="0 0 24 24">
-                  <path d="M23 12a11.05 11.05 0 0 0-22 0zm-5 7a3 3 0 0 1-6 0v-7"/>
+                <svg width="22" height="22" viewBox="0 0 24 24">
+                  <path d="M23 12a11.05 11.05 0 0 0-22 0z" fill="#bbdefb" stroke="#1976d2" stroke-width="2.2" stroke-linejoin="round"/>
+                  <path d="M12 12v7a2 2 0 0 0 4 0" fill="none" stroke="#1976d2" stroke-width="2.2" stroke-linecap="round"/>
                 </svg>
               </span>
               <span>Prob. precipitación hoy</span>
@@ -1038,11 +1050,11 @@
           <div class="metric-row">
             <div class="metric-left">
               <span class="metric-icon">
-                <svg class="ink-stroke" width="22" height="22" viewBox="0 0 24 24">
-                  <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
-                  <line x1="8" y1="21" x2="8" y2="23"/>
-                  <line x1="12" y1="21" x2="12" y2="23"/>
-                  <line x1="16" y1="21" x2="16" y2="23"/>
+                <svg width="22" height="22" viewBox="0 0 24 24">
+                  <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z" fill="#cfd8dc" stroke="#546e7a" stroke-width="2" stroke-linejoin="round"/>
+                  <line x1="8" y1="21" x2="8" y2="23" stroke="#0288d1" stroke-width="2.2" stroke-linecap="round"/>
+                  <line x1="12" y1="21" x2="12" y2="23" stroke="#0288d1" stroke-width="2.2" stroke-linecap="round"/>
+                  <line x1="16" y1="21" x2="16" y2="23" stroke="#0288d1" stroke-width="2.2" stroke-linecap="round"/>
                 </svg>
               </span>
               <span>Probabilidad ahora</span>
@@ -1054,11 +1066,11 @@
           <div class="metric-row">
             <div class="metric-left">
               <span class="metric-icon">
-                <svg class="ink-stroke" width="22" height="22" viewBox="0 0 24 24">
-                  <path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25"/>
-                  <line x1="8" y1="18" x2="8" y2="22"/>
-                  <line x1="12" y1="18" x2="12" y2="22"/>
-                  <line x1="16" y1="18" x2="16" y2="22"/>
+                <svg width="22" height="22" viewBox="0 0 24 24">
+                  <path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25" fill="#cfd8dc" stroke="#546e7a" stroke-width="2" stroke-linejoin="round"/>
+                  <line x1="8" y1="18" x2="8" y2="22" stroke="#1565c0" stroke-width="2.2" stroke-linecap="round"/>
+                  <line x1="12" y1="18" x2="12" y2="22" stroke="#1565c0" stroke-width="2.2" stroke-linecap="round"/>
+                  <line x1="16" y1="18" x2="16" y2="22" stroke="#1565c0" stroke-width="2.2" stroke-linecap="round"/>
                 </svg>
               </span>
               <span>Precipitación</span>
@@ -1070,9 +1082,9 @@
           <div class="metric-row">
             <div class="metric-left">
               <span class="metric-icon">
-                <svg class="ink-stroke" width="22" height="22" viewBox="0 0 24 24">
-                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                  <circle cx="12" cy="12" r="3"/>
+                <svg width="22" height="22" viewBox="0 0 24 24">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" fill="#e0f2f1" stroke="#00897b" stroke-width="2.2"/>
+                  <circle cx="12" cy="12" r="3" fill="#00897b"/>
                 </svg>
               </span>
               <span>Visibilidad</span>
@@ -1084,9 +1096,9 @@
           <div class="metric-row">
             <div class="metric-left">
               <span class="metric-icon">
-                <svg class="ink-stroke" width="22" height="22" viewBox="0 0 24 24">
-                  <path d="M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16z"/>
-                  <path d="M12 14l3-3"/>
+                <svg width="22" height="22" viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="8" fill="#ede7f6" stroke="#5e35b1" stroke-width="2.2"/>
+                  <path d="M12 12l3-3" stroke="#d32f2f" stroke-width="2.2" stroke-linecap="round"/>
                 </svg>
               </span>
               <span>Presión</span>
@@ -1223,8 +1235,8 @@
     var todaySunsetStr = null;
 
     var SVG_THEME_ICONS = {
-      moon: '<svg class="ink-stroke" width="20" height="20" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>',
-      sun: '<svg class="ink-stroke" width="20" height="20" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>'
+      moon: '<svg width="20" height="20" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="#ffe082" stroke="#f57c00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+      sun: '<svg width="20" height="20" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5" fill="#ffe082" stroke="#f57c00" stroke-width="2"/><line x1="12" y1="1" x2="12" y2="3" stroke="#f57c00" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="21" x2="12" y2="23" stroke="#f57c00" stroke-width="2" stroke-linecap="round"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="#f57c00" stroke-width="2" stroke-linecap="round"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="#f57c00" stroke-width="2" stroke-linecap="round"/><line x1="1" y1="12" x2="3" y2="12" stroke="#f57c00" stroke-width="2" stroke-linecap="round"/><line x1="21" y1="12" x2="23" y2="12" stroke="#f57c00" stroke-width="2" stroke-linecap="round"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="#f57c00" stroke-width="2" stroke-linecap="round"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="#f57c00" stroke-width="2" stroke-linecap="round"/></svg>'
     };
 
     var currentCity = {
@@ -1233,16 +1245,16 @@
       lon: -3.7038
     };
 
-    /* --- ICONOS SVG MINIMALISTAS E-INK ESCALABLES --- */
+    /* --- ICONOS SVG MINIMALISTAS E-INK COLOR --- */
     var SVG_ICONS = {
-      sun: '<svg class="ink-stroke" width="100%" height="100%" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>',
-      cloudSun: '<svg class="ink-stroke" width="100%" height="100%" viewBox="0 0 24 24"><path d="M12 2v2m4.24 1.76l1.42-1.42M18 10h2M12 6a4 4 0 0 0-4 4"/><path d="M17.5 19H9a5 5 0 0 1-1-9.9 5.5 5.5 0 0 1 10.5 2.9A3.5 3.5 0 0 1 17.5 19z"/></svg>',
-      cloud: '<svg class="ink-stroke" width="100%" height="100%" viewBox="0 0 24 24"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>',
-      drizzle: '<svg class="ink-stroke" width="100%" height="100%" viewBox="0 0 24 24"><path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25"/><line x1="8" y1="19" x2="8" y2="21"/><line x1="12" y1="17" x2="12" y2="19"/><line x1="16" y1="19" x2="16" y2="21"/></svg>',
-      rain: '<svg class="ink-stroke" width="100%" height="100%" viewBox="0 0 24 24"><path d="M16 13a4 4 0 0 0-8 0"/><path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25"/><line x1="8" y1="17" x2="8" y2="21"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="16" y1="17" x2="16" y2="21"/></svg>',
-      storm: '<svg class="ink-stroke" width="100%" height="100%" viewBox="0 0 24 24"><path d="M19 16.9A5 5 0 0 0 18 7h-1.26a8 8 0 1 0-11.62 9"/><polygon points="13 11 9 17 15 17 11 23"/></svg>',
-      snow: '<svg class="ink-stroke" width="100%" height="100%" viewBox="0 0 24 24"><path d="M20 17.58A5 5 0 0 0 18 8h-1.26A8 8 0 1 0 4 16.25"/><line x1="8" y1="16" x2="8.01" y2="16"/><line x1="8" y1="20" x2="8.01" y2="20"/><line x1="12" y1="18" x2="12.01" y2="18"/><line x1="16" y1="16" x2="16.01" y2="16"/><line x1="16" y1="20" x2="16.01" y2="20"/></svg>',
-      fog: '<svg class="ink-stroke" width="100%" height="100%" viewBox="0 0 24 24"><line x1="3" y1="8" x2="21" y2="8"/><line x1="5" y1="12" x2="19" y2="12"/><line x1="3" y1="16" x2="21" y2="16"/><line x1="7" y1="20" x2="17" y2="20"/></svg>'
+      sun: '<svg width="100%" height="100%" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5" fill="#ffe082" stroke="#f57c00" stroke-width="2.2"/><line x1="12" y1="1" x2="12" y2="3" stroke="#f57c00" stroke-width="2.3" stroke-linecap="round"/><line x1="12" y1="21" x2="12" y2="23" stroke="#f57c00" stroke-width="2.3" stroke-linecap="round"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="#f57c00" stroke-width="2.3" stroke-linecap="round"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="#f57c00" stroke-width="2.3" stroke-linecap="round"/><line x1="1" y1="12" x2="3" y2="12" stroke="#f57c00" stroke-width="2.3" stroke-linecap="round"/><line x1="21" y1="12" x2="23" y2="12" stroke="#f57c00" stroke-width="2.3" stroke-linecap="round"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="#f57c00" stroke-width="2.3" stroke-linecap="round"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="#f57c00" stroke-width="2.3" stroke-linecap="round"/></svg>',
+      cloudSun: '<svg width="100%" height="100%" viewBox="0 0 24 24"><circle cx="12" cy="10" r="4.5" fill="#ffe082" stroke="#f57c00" stroke-width="2"/><line x1="12" y1="2" x2="12" y2="4" stroke="#f57c00" stroke-width="2" stroke-linecap="round"/><line x1="16.24" y1="3.76" x2="17.66" y2="2.34" stroke="#f57c00" stroke-width="2" stroke-linecap="round"/><line x1="19" y1="9" x2="21" y2="9" stroke="#f57c00" stroke-width="2" stroke-linecap="round"/><path d="M17.5 19H9a5 5 0 0 1-1-9.9 5.5 5.5 0 0 1 10.5 2.9A3.5 3.5 0 0 1 17.5 19z" fill="#eceff1" stroke="#546e7a" stroke-width="2.2" stroke-linejoin="round"/></svg>',
+      cloud: '<svg width="100%" height="100%" viewBox="0 0 24 24"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z" fill="#cfd8dc" stroke="#546e7a" stroke-width="2.2" stroke-linejoin="round"/></svg>',
+      drizzle: '<svg width="100%" height="100%" viewBox="0 0 24 24"><path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25" fill="#cfd8dc" stroke="#546e7a" stroke-width="2" stroke-linejoin="round"/><line x1="8" y1="19" x2="8" y2="21" stroke="#0288d1" stroke-width="2.4" stroke-linecap="round"/><line x1="12" y1="17" x2="12" y2="19" stroke="#0288d1" stroke-width="2.4" stroke-linecap="round"/><line x1="16" y1="19" x2="16" y2="21" stroke="#0288d1" stroke-width="2.4" stroke-linecap="round"/></svg>',
+      rain: '<svg width="100%" height="100%" viewBox="0 0 24 24"><path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25" fill="#cfd8dc" stroke="#546e7a" stroke-width="2" stroke-linejoin="round"/><line x1="8" y1="17" x2="8" y2="21" stroke="#1976d2" stroke-width="2.5" stroke-linecap="round"/><line x1="12" y1="19" x2="12" y2="23" stroke="#1976d2" stroke-width="2.5" stroke-linecap="round"/><line x1="16" y1="17" x2="16" y2="21" stroke="#1976d2" stroke-width="2.5" stroke-linecap="round"/></svg>',
+      storm: '<svg width="100%" height="100%" viewBox="0 0 24 24"><path d="M19 16.9A5 5 0 0 0 18 7h-1.26a8 8 0 1 0-11.62 9" fill="#90a4ae" stroke="#37474f" stroke-width="2" stroke-linejoin="round"/><polygon points="13 11 9 17 15 17 11 23" fill="#fbc02d" stroke="#f57f17" stroke-width="1.3" stroke-linejoin="round"/></svg>',
+      snow: '<svg width="100%" height="100%" viewBox="0 0 24 24"><path d="M20 17.58A5 5 0 0 0 18 8h-1.26A8 8 0 1 0 4 16.25" fill="#e0f7fa" stroke="#546e7a" stroke-width="2" stroke-linejoin="round"/><line x1="8" y1="16" x2="8.01" y2="16" stroke="#0288d1" stroke-width="3" stroke-linecap="round"/><line x1="8" y1="20" x2="8.01" y2="20" stroke="#0288d1" stroke-width="3" stroke-linecap="round"/><line x1="12" y1="18" x2="12.01" y2="18" stroke="#0288d1" stroke-width="3" stroke-linecap="round"/><line x1="16" y1="16" x2="16.01" y2="16" stroke="#0288d1" stroke-width="3" stroke-linecap="round"/><line x1="16" y1="20" x2="16.01" y2="20" stroke="#0288d1" stroke-width="3" stroke-linecap="round"/></svg>',
+      fog: '<svg width="100%" height="100%" viewBox="0 0 24 24"><line x1="3" y1="8" x2="21" y2="8" stroke="#78909c" stroke-width="2.5" stroke-linecap="round"/><line x1="5" y1="12" x2="19" y2="12" stroke="#90a4ae" stroke-width="2.5" stroke-linecap="round"/><line x1="3" y1="16" x2="21" y2="16" stroke="#78909c" stroke-width="2.5" stroke-linecap="round"/><line x1="7" y1="20" x2="17" y2="20" stroke="#b0bec5" stroke-width="2.5" stroke-linecap="round"/></svg>'
     };
 
     var WMO_SPANISH = {
@@ -1405,7 +1417,16 @@
             var level = Math.round(bat.level * 100);
             var w = Math.max(2, Math.min(14, Math.round(14 * (level / 100))));
             var levelEl = document.getElementById('bat-level');
-            if (levelEl) levelEl.setAttribute('width', String(w));
+            if (levelEl) {
+              levelEl.setAttribute('width', String(w));
+              if (level <= 20) {
+                levelEl.setAttribute('fill', '#d32f2f');
+              } else if (level <= 40) {
+                levelEl.setAttribute('fill', '#f57c00');
+              } else {
+                levelEl.setAttribute('fill', '#2e7d32');
+              }
+            }
           }
           renderBattery();
           bat.addEventListener('levelchange', renderBattery);
@@ -1484,7 +1505,9 @@
       var tMinToday = (d.temperature_2m_min && d.temperature_2m_min[1] !== undefined)
         ? Math.round(d.temperature_2m_min[1])
         : ((d.temperature_2m_min && d.temperature_2m_min[0] !== undefined) ? Math.round(d.temperature_2m_min[0]) : '--');
-      document.getElementById('txt-temp-range').textContent = tMaxToday + '/' + tMinToday + '°C';
+      var tMaxHtml = '<span style="color:#d32f2f;font-weight:900;font-size:0.85em;margin-right:2px">▲</span>' + tMaxToday + '°';
+      var tMinHtml = '<span style="color:#1976d2;font-weight:900;font-size:0.85em;margin-left:6px;margin-right:2px">▼</span>' + tMinToday + '°C';
+      document.getElementById('txt-temp-range').innerHTML = tMaxHtml + ' ' + tMinHtml;
 
       // Sensación Térmica
       var feelsLike = (c.apparent_temperature !== undefined && c.apparent_temperature !== null)
@@ -1513,7 +1536,8 @@
         ? Math.round(air.current.european_aqi) : 34;
       var pm25Val = (air && air.current && air.current.pm2_5 !== undefined && air.current.pm2_5 !== null)
         ? Math.round(air.current.pm2_5) : 12;
-      document.getElementById('val-aqi').textContent = aqiVal;
+      var aqiColor = aqiVal <= 50 ? '#2e7d32' : (aqiVal <= 100 ? '#f57c00' : '#d32f2f');
+      document.getElementById('val-aqi').innerHTML = '<span style="color:' + aqiColor + ';font-size:0.7em;vertical-align:middle;margin-right:3px">●</span>' + aqiVal;
       document.getElementById('val-pm25').textContent = pm25Val + 'µg/m³';
 
       var pollenText = "Bajo";
@@ -1634,9 +1658,9 @@
           daySub = "Hoy";
         }
 
-        var rainBadge = pop >= 30 ? (
+        var rainBadge = pop >= 25 ? (
           '<span class="forecast-rain-prob" title="Probabilidad de lluvia ' + pop + '%">' +
-            '<svg class="ink-stroke" width="14" height="14" viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>' +
+            '<svg width="13" height="13" viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" fill="#b3e5fc" stroke="#0288d1" stroke-width="2.2"/></svg>' +
             pop + '%' +
           '</span>'
         ) : '';
@@ -1655,7 +1679,7 @@
           '<div class="forecast-rain-col">' +
             rainBadge +
           '</div>' +
-          '<div class="forecast-temp">' + tMax + '° / ' + tMin + '°</div>';
+          '<div class="forecast-temp"><span style="color:#d32f2f;font-weight:900;font-size:0.85em">▲</span>' + tMax + '° <span style="color:#1976d2;font-weight:900;font-size:0.85em">▼</span>' + tMin + '°</div>';
         container.appendChild(row);
       }
     }

@@ -4,9 +4,10 @@
 
 ## Estado
 - **Proyecto:** ClimaDesk (repo [kapi21/ClimaDesk](https://github.com/kapi21/ClimaDesk))
-- **Estrategia Multi-Dispositivo:** Dos ramas dedicadas y dos APKs independientes:
-  1. Rama **`tablet-galaxy-tab2`** → `app-tablet-debug.apk` (Samsung Galaxy Tab 2)
-  2. Rama **`redmi4x-lite`** → `app-redmi-debug.apk` (Xiaomi Redmi 4X)
+- **Estrategia Multi-Dispositivo:** Tres ramas dedicadas y sus APKs independientes:
+  1. Rama **`tablet-galaxy-tab2`** → `app-tablet-debug.apk` (Samsung Galaxy Tab 2 - Monocromo E-Ink)
+  2. Rama **`tablet-galaxy-tab2-color`** → `app-tablet-color-debug.apk` (Samsung Galaxy Tab 2 - E-Ink Blanco Roto + Elementos a Color)
+  3. Rama **`redmi4x-lite`** → `app-redmi-debug.apk` (Xiaomi Redmi 4X Lite)
 - **Versión app:** `1.8-lite` (`versionCode` 10) en Redmi 4X / `1.8` (`versionCode` 9) en Tablet — package `es.climadesk.app`
 
 ## Hecho en esta sesión

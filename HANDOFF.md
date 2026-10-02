@@ -5,9 +5,9 @@
 ## Estado
 - **Proyecto:** ClimaDesk (repo [kapi21/ClimaDesk](https://github.com/kapi21/ClimaDesk))
 - **Estrategia Multi-Dispositivo:** Tres ramas dedicadas y sus APKs independientes:
-  1. Rama **`tablet-galaxy-tab2`** → `app-tablet-debug.apk` (Samsung Galaxy Tab 2 - Monocromo E-Ink)
-  2. Rama **`tablet-galaxy-tab2-color`** → `app-tablet-color-debug.apk` (Samsung Galaxy Tab 2 - E-Ink Blanco Roto + Elementos a Color)
-  3. Rama **`redmi4x-lite`** → `app-redmi-debug.apk` (Xiaomi Redmi 4X Lite)
+  1. Rama **`tablet-galaxy-tab2`** → `apks/Climadesk-v1.8.apk` (Samsung Galaxy Tab 2 - Monocromo E-Ink)
+  2. Rama **`tablet-galaxy-tab2-color`** → `apks/Climadesk-Color-v1.8.apk` (Samsung Galaxy Tab 2 - E-Ink Color)
+  3. Rama **`redmi4x-lite`** → `apks/Climadesk-Lite-v1.8.apk` (Xiaomi Redmi 4X Lite)
 - **Versión app:** `1.8-lite` (`versionCode` 10) en Redmi 4X / `1.8` (`versionCode` 9) en Tablet — package `es.climadesk.app`
 
 ## Hecho en esta sesión
@@ -31,9 +31,9 @@
 - `kiosk-app/app/src/main/assets/index.html` (interfaz, reloj SVG, cálculo de tema, selectores)
 - `kiosk-app/app/src/main/java/es/climadesk/app/MainActivity.java` (WebView, bridge JS, WebChromeClient con logs)
 - `kiosk-app/app/build.gradle.kts` (configuración de compilación)
-- `apks/app-tablet-color-debug.apk` (Galaxy Tab 2 — E-Ink Color con fondo blanco roto)
-- `apks/app-tablet-debug.apk` (Galaxy Tab 2 — E-Ink Monocromo original)
-- `apks/app-redmi-debug.apk` (Xiaomi Redmi 4X — Edición Lite 640x360 dp)
+- `apks/Climadesk-Color-v1.8.apk` (Galaxy Tab 2 — E-Ink Color con fondo blanco roto)
+- `apks/Climadesk-v1.8.apk` (Galaxy Tab 2 — E-Ink Monocromo original)
+- `apks/Climadesk-Lite-v1.8.apk` (Xiaomi Redmi 4X — Edición Lite 640x360 dp)
 
 ## Cómo verificar y desplegar
 
@@ -42,18 +42,18 @@
 2. Compilar: `cd kiosk-app && gradlew.bat assembleDebug`
 3. Instalar: Si MIUI bloquea ADB directo, enviar por push y abrir:
    ```bash
-   adb -s 6f207ef7d440 push apks/app-redmi-debug.apk /sdcard/Download/ClimaDesk-Lite.apk
+   adb -s 6f207ef7d440 push apks/Climadesk-Lite-v1.8.apk /sdcard/Download/ClimaDesk-Lite.apk
    adb -s 6f207ef7d440 shell "am start -a android.intent.action.VIEW -d 'file:///sdcard/Download/ClimaDesk-Lite.apk' -t 'application/vnd.android.package-archive'"
    ```
 
 ### En Samsung Galaxy Tab 2 (`c32063e15928a6f`)
 - **Instalar versión Color:**
   ```bash
-  adb -s c32063e15928a6f install -r apks/app-tablet-color-debug.apk
+  adb -s c32063e15928a6f install -r apks/Climadesk-Color-v1.8.apk
   ```
 - **Instalar versión Monocromo:**
   ```bash
-  adb -s c32063e15928a6f install -r apks/app-tablet-debug.apk
+  adb -s c32063e15928a6f install -r apks/Climadesk-v1.8.apk
   ```
 
 ## Roadmap

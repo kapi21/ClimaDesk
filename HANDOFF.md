@@ -27,12 +27,13 @@
 - **Columna 3 (4 Métricas Clave)**: Humedad (%), Probabilidad Ahora (%), Probabilidad Máx Hoy (%) y Precipitación (mm).
 - **Rendimiento ultra-ligero**: Petición Open-Meteo reducida a los datos necesarios (sin carga pesada de calidad del aire ni días sobrantes), `fetch()` nativo prioritario con fallback y puente `WebConsole` para depuración en logcat.
 
-## Archivos clave
+## Archivos clave y APKs
 - `kiosk-app/app/src/main/assets/index.html` (interfaz, reloj SVG, cálculo de tema, selectores)
 - `kiosk-app/app/src/main/java/es/climadesk/app/MainActivity.java` (WebView, bridge JS, WebChromeClient con logs)
 - `kiosk-app/app/build.gradle.kts` (configuración de compilación)
-- `app-tablet-debug.apk` (compilación lista para Galaxy Tab 2)
-- `app-redmi-debug.apk` (compilación lista para Redmi 4X Lite)
+- `apks/app-tablet-color-debug.apk` (Galaxy Tab 2 — E-Ink Color con fondo blanco roto)
+- `apks/app-tablet-debug.apk` (Galaxy Tab 2 — E-Ink Monocromo original)
+- `apks/app-redmi-debug.apk` (Xiaomi Redmi 4X — Edición Lite 640x360 dp)
 
 ## Cómo verificar y desplegar
 
@@ -41,17 +42,19 @@
 2. Compilar: `cd kiosk-app && gradlew.bat assembleDebug`
 3. Instalar: Si MIUI bloquea ADB directo, enviar por push y abrir:
    ```bash
-   adb -s 6f207ef7d440 push app-redmi-debug.apk /sdcard/Download/ClimaDesk-Lite.apk
+   adb -s 6f207ef7d440 push apks/app-redmi-debug.apk /sdcard/Download/ClimaDesk-Lite.apk
    adb -s 6f207ef7d440 shell "am start -a android.intent.action.VIEW -d 'file:///sdcard/Download/ClimaDesk-Lite.apk' -t 'application/vnd.android.package-archive'"
    ```
 
 ### En Samsung Galaxy Tab 2 (`c32063e15928a6f`)
-1. Cambiar a rama: `git checkout tablet-galaxy-tab2`
-2. Compilar: `cd kiosk-app && gradlew.bat assembleDebug`
-3. Instalar directo vía ADB:
-   ```bash
-   adb -s c32063e15928a6f install -r app-tablet-debug.apk
-   ```
+- **Instalar versión Color:**
+  ```bash
+  adb -s c32063e15928a6f install -r apks/app-tablet-color-debug.apk
+  ```
+- **Instalar versión Monocromo:**
+  ```bash
+  adb -s c32063e15928a6f install -r apks/app-tablet-debug.apk
+  ```
 
 ## Roadmap
 

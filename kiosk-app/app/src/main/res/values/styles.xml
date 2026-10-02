@@ -3,6 +3,6 @@
     <style name="Theme.ClimaDesk" parent="@android:style/Theme.DeviceDefault.NoActionBar.Fullscreen">
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
-        <item name="android:windowBackground">#0b1020</item>
+        <item name="android:windowBackground">#f4f3ef</item>
     </style>
 </resources>

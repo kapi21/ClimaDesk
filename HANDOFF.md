@@ -1,18 +1,22 @@
 # HANDOFF — ClimaDesk
 
-Última sesión: **2026-10-02 22:50** (cerrada)
+Última sesión: **2026-10-30** (Lite v1.8.1 docs en `main`)
 
 ## Estado
 - **Proyecto:** ClimaDesk (repo [kapi21/ClimaDesk](https://github.com/kapi21/ClimaDesk))
 - **Estrategia Multi-Dispositivo:** Tres ramas dedicadas y sus APKs independientes centralizadas en GitHub Releases y carpeta `apks/`:
   1. Rama **`tablet-galaxy-tab2-color`** → `apks/Climadesk-Color-v1.8.apk` (Galaxy Tab 2 — E-Ink Color)
   2. Rama **`tablet-galaxy-tab2`** → `apks/Climadesk-v1.8.apk` (Galaxy Tab 2 — Monocromo E-Ink)
-  3. Rama **`redmi4x-lite`** → `apks/Climadesk-Lite-v1.8.apk` (Xiaomi Redmi 4X — Edición Lite 640x360 dp)
-- **Versión app:** `1.8-lite` (`versionCode` 10) en Redmi 4X / `1.8` (`versionCode` 9) en Tablet — package `es.climadesk.app`
+  3. Rama **`redmi4x-lite`** → `apks/Climadesk-Lite-v1.8.1.apk` (Xiaomi Redmi 4X — Edición Lite 640x360 dp; AMANECER/ATARDECER en columna)
+- **Versión app:** `1.8.1-lite` (`versionCode` 11) en Redmi 4X / `1.8` (`versionCode` 9) en Tablet — package `es.climadesk.app`
 - **GitHub Release oficial:** [v1.8](https://github.com/kapi21/ClimaDesk/releases/tag/v1.8) con los 3 binarios disponibles para descarga directa.
 - **Hoja de ruta activa:** Documentada detalladamente en [ROADMAP.md](file:///c:/@MIS%20PROYECTOS/REDMI4X/ROADMAP.md).
 
-## Hecho en esta sesión (2026-10-02)
+## Hecho reciente (Lite v1.8.1)
+
+- **Redmi 4X Lite:** layout solar vertical — AMANECER y ATARDECER apilados en columna (rama `redmi4x-lite`, binario local `apks/Climadesk-Lite-v1.8.1.apk`, `versionCode` 11).
+
+## Hecho en sesión anterior (2026-10-02)
 
 ### 1. Tablet Galaxy Tab 2 Color (Rama `tablet-galaxy-tab2-color`)
 - **Estética E-Ink Color**: Fondo blanco roto estilo papel de tinta electrónica (`#f4f1ea`), tarjetas limpias (`#fdfcf9`) y tipografía/números en negro puro (`#111111`).
@@ -41,14 +45,14 @@
 - `ROADMAP.md` (hoja de ruta global de tareas y plataformas)
 - `apks/Climadesk-Color-v1.8.apk` (Galaxy Tab 2 — E-Ink Color)
 - `apks/Climadesk-v1.8.apk` (Galaxy Tab 2 — E-Ink Monocromo)
-- `apks/Climadesk-Lite-v1.8.apk` (Xiaomi Redmi 4X — Edición Lite 640x360 dp)
+- `apks/Climadesk-Lite-v1.8.1.apk` (Xiaomi Redmi 4X — Edición Lite 640x360 dp; AMANECER/ATARDECER en columna)
 
 ## Cómo verificar y desplegar
 
 ### En Redmi 4X (`6f207ef7d440`)
 ```bash
 git checkout redmi4x-lite
-adb -s 6f207ef7d440 push apks/Climadesk-Lite-v1.8.apk /sdcard/Download/ClimaDesk-Lite.apk
+adb -s 6f207ef7d440 push apks/Climadesk-Lite-v1.8.1.apk /sdcard/Download/ClimaDesk-Lite.apk
 adb -s 6f207ef7d440 shell "am start -a android.intent.action.VIEW -d 'file:///sdcard/Download/ClimaDesk-Lite.apk' -t 'application/vnd.android.package-archive'"
 ```
 

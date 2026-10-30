@@ -10,8 +10,8 @@ android {
         applicationId = "es.climadesk.app"
         minSdk = 21
         targetSdk = 25
-        versionCode = 10
-        versionName = "1.8-lite"
+        versionCode = 11
+        versionName = "1.8.1-lite"
     }
 
     buildTypes {

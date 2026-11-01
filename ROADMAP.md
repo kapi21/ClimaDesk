@@ -30,7 +30,8 @@ Hoja de ruta del proyecto **ClimaDesk**, organizada por dispositivos, funcionali
 - [ ] **Modo Solo-Reloj**:
   - Opción en menú de ajustes para ocultar paneles meteorológicos y maximizar el reloj.
 - [ ] **Ajuste fino de brillo / Sensor de luz**:
-  - ✅ **Overlay por amanecer/atardecer** (Open-Meteo, rampas ~30 min, botón test ◐) — implementado en working tree y stashes (variantes dispositivo); **pendiente** commit unificado y APK/release; spec `docs/superpowers/specs/2026-11-01-sunset-dim-overlay-design.md`.
+  - ✅ **Atenuación por elevación solar** (estilo WebClima: `--night` 0…1 → overlay `night × 0.45`; botón test; committed/pushed en las 4 ramas; builds locales Lite `1.8.2` / Tab `1.8.1`). Spec inicial (sunrise/sunset): `docs/superpowers/specs/2026-11-01-sunset-dim-overlay-design.md`.
+  - 🔍 **Revisar claridad visual de la atenuación** — feedback 2026-11-01: el efecto no se percibe con claridad; **dejar como está** por ahora y retomar (curva, máximo 0.45, E-Ink vs LCD, demo).
   - ⏳ **Pendiente:** brillo del sistema Android y sensor de luz ambiental (sin cambios Java en la entrega del overlay).
 
 ### Prioridad 3 (P3) — Mantenimiento e Infraestructura

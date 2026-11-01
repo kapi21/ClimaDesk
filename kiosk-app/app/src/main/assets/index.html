@@ -71,6 +71,8 @@
       display: flex;
       align-items: center;
       gap: 0.45rem;
+      position: relative;
+      z-index: 45; /* above #dim-overlay (40) */
     }
     .updated {
       font-size: clamp(0.66rem, 2.4vw, 0.8rem);
@@ -95,6 +97,10 @@
     }
     .refresh:active { opacity: 0.7; }
     .refresh.busy { animation: spin 0.8s linear infinite; }
+    #btn-dim-test {
+      font-size: 1.35rem;
+      line-height: 1;
+    }
     #btn-dim-test.busy {
       animation: none;
       opacity: 0.55;
@@ -558,25 +564,26 @@
 
     function demoOpacity(progress01) {
       const p = Math.max(0, Math.min(1, progress01));
-      if (p < 0.12) return 0;
-      if (p < 0.38) return DIM_MAX * ((p - 0.12) / 0.26);
-      if (p < 0.62) return DIM_MAX;
-      if (p < 0.88) return DIM_MAX * (1 - (p - 0.62) / 0.26);
+      if (p < 0.30) return DIM_MAX * (p / 0.30);
+      if (p < 0.50) return DIM_MAX;
+      if (p < 0.85) return DIM_MAX * (1 - (p - 0.50) / 0.35);
       return 0;
     }
 
     function stopDimDemo() {
       dimDemoActive = false;
       if (dimDemoTimer) {
-        clearTimeout(dimDemoTimer);
+        clearInterval(dimDemoTimer);
         dimDemoTimer = null;
       }
       if (dimDemoRaf) {
-        cancelAnimationFrame(dimDemoRaf);
+        clearTimeout(dimDemoRaf);
         dimDemoRaf = null;
       }
       const btn = document.getElementById("btn-dim-test");
       if (btn) btn.classList.remove("busy");
+      const el = document.getElementById("dim-overlay");
+      if (el) el.style.transition = "";
       applyDimOverlay(new Date());
     }
 
@@ -585,25 +592,28 @@
         stopDimDemo();
         return;
       }
+      const el = document.getElementById("dim-overlay");
+      if (!el) return;
       dimDemoActive = true;
       const btn = document.getElementById("btn-dim-test");
       if (btn) btn.classList.add("busy");
-      const el = document.getElementById("dim-overlay");
+      el.style.transition = "none";
       const t0 = Date.now();
-      function frame() {
+      function tickDemo() {
         if (!dimDemoActive) return;
         const p = (Date.now() - t0) / DIM_DEMO_MS;
-        if (el) el.style.opacity = String(demoOpacity(p));
         if (p >= 1) {
+          el.style.opacity = "0";
           stopDimDemo();
           return;
         }
-        dimDemoRaf = requestAnimationFrame(frame);
+        el.style.opacity = String(demoOpacity(p));
       }
-      dimDemoRaf = requestAnimationFrame(frame);
-      dimDemoTimer = setTimeout(function () {
-        stopDimDemo();
-      }, DIM_DEMO_MS + 50);
+      tickDemo();
+      dimDemoTimer = setInterval(tickDemo, 50);
+      dimDemoRaf = setTimeout(function () {
+        if (dimDemoActive) stopDimDemo();
+      }, DIM_DEMO_MS + 120);
     }
 
     async function fetchJson(url) {

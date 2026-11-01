@@ -157,6 +157,20 @@
       cursor: pointer;
     }
 
+    #dim-overlay {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 90; /* city-picker 100, settings-modal 120 */
+      transition: opacity 0.9s linear;
+    }
+
+    #btn-dim-test.busy {
+      opacity: 0.55;
+    }
+
     /* Cuadrícula Principal */
     .dashboard-grid {
       flex: 1;
@@ -812,6 +826,7 @@
   </style>
 </head>
 <body>
+  <div id="dim-overlay" aria-hidden="true"></div>
 
   <div class="container">
     <!-- Barra Superior -->
@@ -843,6 +858,7 @@
             <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
           </svg>
         </span>
+        <span class="status-icon" id="btn-dim-test" title="Probar atenuacion" role="button" aria-label="Probar atenuacion">◐</span>
         <!-- Botón Auto-Localización GPS/IP -->
         <span class="status-icon" id="btn-auto-locate" title="Auto-detectar ubicación">
           <svg class="ink-stroke" width="18" height="18" viewBox="0 0 24 24">
@@ -1221,6 +1237,97 @@
     var themeMode = "auto"; // "auto" | "day" | "night"
     var todaySunriseStr = null;
     var todaySunsetStr = null;
+    var RAMP_MS = 30 * 60 * 1000;
+    var DIM_MAX = 0.30;
+    var DIM_DEMO_MS = 12000;
+    var dimDemoActive = false;
+    var dimDemoTimer = null;
+    var dimDemoRaf = null;
+    var tomorrowSunriseStr = null;
+
+    function dimOpacity(nowMs, sunriseTodayMs, sunsetTodayMs, sunriseTomorrowMs) {
+      if (!Number.isFinite(sunriseTodayMs) || !Number.isFinite(sunsetTodayMs)) return 0;
+      var nextSr = Number.isFinite(sunriseTomorrowMs) ? sunriseTomorrowMs : (sunriseTodayMs + 24 * 3600 * 1000);
+      if (nowMs < sunriseTodayMs) return DIM_MAX;
+      if (nowMs < sunriseTodayMs + RAMP_MS) return DIM_MAX * (1 - (nowMs - sunriseTodayMs) / RAMP_MS);
+      if (nowMs < sunsetTodayMs) return 0;
+      if (nowMs < sunsetTodayMs + RAMP_MS) return DIM_MAX * ((nowMs - sunsetTodayMs) / RAMP_MS);
+      if (nowMs < nextSr) return DIM_MAX;
+      if (nowMs < nextSr + RAMP_MS) return DIM_MAX * (1 - (nowMs - nextSr) / RAMP_MS);
+      return 0;
+    }
+
+    function parseSunIso(iso) {
+      if (!iso) return NaN;
+      var t = Date.parse(iso);
+      return Number.isFinite(t) ? t : NaN;
+    }
+
+    function isSameLocalDay(iso, now) {
+      if (!iso || !now) return false;
+      var d = new Date(iso);
+      if (Number.isNaN(d.getTime())) return false;
+      return (
+        d.getFullYear() === now.getFullYear() &&
+        d.getMonth() === now.getMonth() &&
+        d.getDate() === now.getDate()
+      );
+    }
+
+    function applyDimOverlay(now) {
+      if (dimDemoActive) return;
+      var el = document.getElementById('dim-overlay');
+      if (!el) return;
+      if (
+        !todaySunriseStr ||
+        !todaySunsetStr ||
+        !isSameLocalDay(todaySunriseStr, now) ||
+        !isSameLocalDay(todaySunsetStr, now)
+      ) {
+        el.style.opacity = '0';
+        return;
+      }
+      var sr = parseSunIso(todaySunriseStr);
+      var ss = parseSunIso(todaySunsetStr);
+      var sr2 = parseSunIso(tomorrowSunriseStr);
+      el.style.opacity = String(dimOpacity(now.getTime(), sr, ss, sr2));
+    }
+
+    function demoOpacity(progress01) {
+      var p = Math.max(0, Math.min(1, progress01));
+      if (p < 0.12) return 0;
+      if (p < 0.38) return DIM_MAX * ((p - 0.12) / 0.26);
+      if (p < 0.62) return DIM_MAX;
+      if (p < 0.88) return DIM_MAX * (1 - (p - 0.62) / 0.26);
+      return 0;
+    }
+
+    function stopDimDemo() {
+      dimDemoActive = false;
+      if (dimDemoTimer) { clearTimeout(dimDemoTimer); dimDemoTimer = null; }
+      if (dimDemoRaf) { cancelAnimationFrame(dimDemoRaf); dimDemoRaf = null; }
+      var btn = document.getElementById('btn-dim-test');
+      if (btn) btn.classList.remove('busy');
+      applyDimOverlay(new Date());
+    }
+
+    function startDimDemo() {
+      if (dimDemoActive) { stopDimDemo(); return; }
+      dimDemoActive = true;
+      var btn = document.getElementById('btn-dim-test');
+      if (btn) btn.classList.add('busy');
+      var el = document.getElementById('dim-overlay');
+      var t0 = Date.now();
+      function frame() {
+        if (!dimDemoActive) return;
+        var p = (Date.now() - t0) / DIM_DEMO_MS;
+        if (el) el.style.opacity = String(demoOpacity(p));
+        if (p >= 1) { stopDimDemo(); return; }
+        dimDemoRaf = requestAnimationFrame(frame);
+      }
+      dimDemoRaf = requestAnimationFrame(frame);
+      dimDemoTimer = setTimeout(function () { stopDimDemo(); }, DIM_DEMO_MS + 50);
+    }
 
     var SVG_THEME_ICONS = {
       moon: '<svg class="ink-stroke" width="20" height="20" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>',
@@ -1396,6 +1503,7 @@
 
       // Actualizar tema automáticamente según la hora actual
       updateTheme();
+      applyDimOverlay(now);
     }
 
     function initBatteryMonitor() {
@@ -1500,11 +1608,20 @@
         todaySunriseStr = d.sunrise[1];
         var sr = d.sunrise[1].split('T')[1] || '--:--';
         document.getElementById('txt-sunrise').textContent = sr;
+      } else {
+        todaySunriseStr = null;
+      }
+      if (d.sunrise && d.sunrise[2]) {
+        tomorrowSunriseStr = d.sunrise[2];
+      } else {
+        tomorrowSunriseStr = null;
       }
       if (d.sunset && d.sunset[1]) {
         todaySunsetStr = d.sunset[1];
         var ss = d.sunset[1].split('T')[1] || '--:--';
         document.getElementById('txt-sunset').textContent = ss;
+      } else {
+        todaySunsetStr = null;
       }
       updateTheme();
 
@@ -1939,6 +2056,10 @@
       var btnTheme = document.getElementById('btn-theme-toggle');
       if (btnTheme) {
         btnTheme.addEventListener('click', toggleTheme);
+      }
+      var btnDim = document.getElementById('btn-dim-test');
+      if (btnDim) {
+        btnDim.addEventListener('click', startDimDemo);
       }
 
       loadData();

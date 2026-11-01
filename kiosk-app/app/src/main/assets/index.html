@@ -7,6 +7,7 @@
   <title>ClimaDesk</title>
   <style>
     :root {
+      --night: 0;
       --bg: #0b1020;
       --fg: #f4f1ea;
       --muted: #9aa3b5;
@@ -443,13 +444,13 @@
     let citySearchTimer = null;
     let todaySunriseStr = null;
     let todaySunsetStr = null;
-    let tomorrowSunriseStr = null;
-    const RAMP_MS = 30 * 60 * 1000;
-    const DIM_MAX = 0.30;
+    // Atenuacion estilo WebClima: elevacion solar -> --night (0..1) -> overlay * 0.45
+    const NIGHT_DIM = 0.45;
     const DIM_DEMO_MS = 12000;
     let dimDemoActive = false;
     let dimDemoTimer = null;
     let dimDemoRaf = null;
+    let autoSolarDim = true;
 
     const WMO = {
       0: ["Despejado", "☀️"], 1: ["Mayormente despejado", "🌤️"], 2: ["Parcialmente nublado", "⛅"], 3: ["Nublado", "☁️"],
@@ -514,59 +515,53 @@
       applyDimOverlay(now);
     }
 
-    function dimOpacity(nowMs, sunriseTodayMs, sunsetTodayMs, sunriseTomorrowMs) {
-      if (!Number.isFinite(sunriseTodayMs) || !Number.isFinite(sunsetTodayMs)) return 0;
-      const nextSr = Number.isFinite(sunriseTomorrowMs) ? sunriseTomorrowMs : (sunriseTodayMs + 24 * 3600 * 1000);
-      if (nowMs < sunriseTodayMs) return DIM_MAX;
-      if (nowMs < sunriseTodayMs + RAMP_MS) return DIM_MAX * (1 - (nowMs - sunriseTodayMs) / RAMP_MS);
-      if (nowMs < sunsetTodayMs) return 0;
-      if (nowMs < sunsetTodayMs + RAMP_MS) return DIM_MAX * ((nowMs - sunsetTodayMs) / RAMP_MS);
-      if (nowMs < nextSr) return DIM_MAX;
-      if (nowMs < nextSr + RAMP_MS) return DIM_MAX * (1 - (nowMs - nextSr) / RAMP_MS);
-      return 0;
+    function sunElevation(date, lat, lon) {
+      const rad = Math.PI / 180;
+      const dayMs = 86400000;
+      const J1970 = 2440588;
+      const J2000 = 2451545;
+      const d = date.valueOf() / dayMs - 0.5 + J1970 - J2000;
+      const M = rad * (357.5291 + 0.98560028 * d);
+      const C = rad * (1.9148 * Math.sin(M) + 0.02 * Math.sin(2 * M) + 0.0003 * Math.sin(3 * M));
+      const L = M + C + rad * 102.9372 + Math.PI;
+      const e = rad * 23.4397;
+      const dec = Math.asin(Math.sin(e) * Math.sin(L));
+      const ra = Math.atan2(Math.sin(L) * Math.cos(e), Math.cos(L));
+      const H = rad * (280.16 + 360.9856235 * d) + rad * lon - ra;
+      const phi = rad * lat;
+      return Math.asin(Math.sin(phi) * Math.sin(dec) + Math.cos(phi) * Math.cos(dec) * Math.cos(H)) / rad;
     }
 
-    function parseSunIso(iso) {
-      if (!iso) return NaN;
-      const t = Date.parse(iso);
-      return Number.isFinite(t) ? t : NaN;
+    function nightFromElevation(elev) {
+      // >= +2 deg dia; <= -8 deg noche; transicion lineal (como WebClima)
+      return Math.max(0, Math.min(1, (2 - elev) / 10));
     }
 
-    function isSameLocalDay(iso, now) {
-      if (!iso || !now) return false;
-      const d = new Date(iso);
-      if (Number.isNaN(d.getTime())) return false;
-      return (
-        d.getFullYear() === now.getFullYear() &&
-        d.getMonth() === now.getMonth() &&
-        d.getDate() === now.getDate()
-      );
+    function setNightLevel(n) {
+      n = Math.max(0, Math.min(1, n));
+      document.documentElement.style.setProperty("--night", n.toFixed(3));
+      const el = document.getElementById("dim-overlay");
+      if (el) el.style.opacity = String(n * NIGHT_DIM);
     }
 
     function applyDimOverlay(now) {
-      if (dimDemoActive) return;
+      if (dimDemoActive || !autoSolarDim) return;
       const el = document.getElementById("dim-overlay");
       if (!el) return;
-      if (
-        !todaySunriseStr ||
-        !todaySunsetStr ||
-        !isSameLocalDay(todaySunriseStr, now) ||
-        !isSameLocalDay(todaySunsetStr, now)
-      ) {
-        el.style.opacity = "0";
+      const lat = currentLocation && Number(currentLocation.lat);
+      const lon = currentLocation && Number(currentLocation.lon);
+      if (!isFinite(lat) || !isFinite(lon)) {
+        setNightLevel(0);
         return;
       }
-      const sr = parseSunIso(todaySunriseStr);
-      const ss = parseSunIso(todaySunsetStr);
-      const sr2 = parseSunIso(tomorrowSunriseStr);
-      el.style.opacity = String(dimOpacity(now.getTime(), sr, ss, sr2));
+      setNightLevel(nightFromElevation(sunElevation(now, lat, lon)));
     }
 
-    function demoOpacity(progress01) {
+    function demoNight(progress01) {
       const p = Math.max(0, Math.min(1, progress01));
-      if (p < 0.30) return DIM_MAX * (p / 0.30);
-      if (p < 0.50) return DIM_MAX;
-      if (p < 0.85) return DIM_MAX * (1 - (p - 0.50) / 0.35);
+      if (p < 0.30) return p / 0.30;
+      if (p < 0.50) return 1;
+      if (p < 0.85) return 1 - (p - 0.50) / 0.35;
       return 0;
     }
 
@@ -603,11 +598,11 @@
         if (!dimDemoActive) return;
         const p = (Date.now() - t0) / DIM_DEMO_MS;
         if (p >= 1) {
-          el.style.opacity = "0";
+          setNightLevel(0);
           stopDimDemo();
           return;
         }
-        el.style.opacity = String(demoOpacity(p));
+        setNightLevel(demoNight(p));
       }
       tickDemo();
       dimDemoTimer = setInterval(tickDemo, 50);
@@ -830,7 +825,6 @@
       const popMax = d.precipitation_probability_max && d.precipitation_probability_max[0];
       todaySunriseStr = d.sunrise && d.sunrise[0] ? d.sunrise[0] : null;
       todaySunsetStr = d.sunset && d.sunset[0] ? d.sunset[0] : null;
-      tomorrowSunriseStr = d.sunrise && d.sunrise[1] ? d.sunrise[1] : null;
 
       document.getElementById("city").textContent = currentLocation.place;
       document.getElementById("icon").textContent = meta[1];

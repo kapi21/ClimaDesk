@@ -88,6 +88,7 @@ Más detalle en [HANDOFF.md](HANDOFF.md) y en `docs/superpowers/specs/2026-09-28
 
 - **📍** — forzar ubicación automática  
 - **↻** — refrescar el clima ahora  
+- **◐** — probar atenuación día/noche (demo ~12 s; segundo toque cancela). Disponible en builds locales **≥ 1.8.1** (ver [HANDOFF.md](HANDOFF.md)); aún **no** incluido en los APK de GitHub Release **v1.8**.  
 - **Tocar el nombre de la ciudad** — elegir ciudad manualmente  
 - **Pulsación larga en la fecha** — ajustar el tamaño de la interfaz  
 

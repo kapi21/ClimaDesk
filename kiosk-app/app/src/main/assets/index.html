@@ -95,7 +95,20 @@
     }
     .refresh:active { opacity: 0.7; }
     .refresh.busy { animation: spin 0.8s linear infinite; }
+    #btn-dim-test.busy {
+      animation: none;
+      opacity: 0.55;
+    }
     @keyframes spin { to { transform: rotate(360deg); } }
+    #dim-overlay {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 40;
+      transition: opacity 0.9s linear;
+    }
     .clock-block { text-align: center; }
     .date {
       font-size: clamp(0.8rem, 3vw, 1rem);
@@ -338,11 +351,13 @@
   </style>
 </head>
 <body>
+  <div id="dim-overlay" aria-hidden="true"></div>
   <div class="screen">
     <div class="top">
       <div class="city" id="city">Badajoz</div>
       <div class="top-right">
         <div class="updated" id="updated">-</div>
+        <button type="button" class="refresh" id="btn-dim-test" title="Probar atenuacion" aria-label="Probar atenuacion">◐</button>
         <button type="button" class="refresh" id="locate" title="Usar ubicacion automatica" aria-label="Usar ubicacion automatica">📍</button>
         <button type="button" class="refresh" id="refresh" title="Actualizar" aria-label="Actualizar clima">↻</button>
       </div>
@@ -420,6 +435,15 @@
     let currentLocation = { ...DEFAULT_LOCATION };
     let citySearchSeq = 0;
     let citySearchTimer = null;
+    let todaySunriseStr = null;
+    let todaySunsetStr = null;
+    let tomorrowSunriseStr = null;
+    const RAMP_MS = 30 * 60 * 1000;
+    const DIM_MAX = 0.30;
+    const DIM_DEMO_MS = 12000;
+    let dimDemoActive = false;
+    let dimDemoTimer = null;
+    let dimDemoRaf = null;
 
     const WMO = {
       0: ["Despejado", "☀️"], 1: ["Mayormente despejado", "🌤️"], 2: ["Parcialmente nublado", "⛅"], 3: ["Nublado", "☁️"],
@@ -481,6 +505,105 @@
         pad(now.getHours()) + ":" + pad(now.getMinutes()) + '<span class="secs">' + pad(now.getSeconds()) + "</span>";
       document.getElementById("date").textContent =
         days[now.getDay()] + " " + now.getDate() + " de " + months[now.getMonth()];
+      applyDimOverlay(now);
+    }
+
+    function dimOpacity(nowMs, sunriseTodayMs, sunsetTodayMs, sunriseTomorrowMs) {
+      if (!Number.isFinite(sunriseTodayMs) || !Number.isFinite(sunsetTodayMs)) return 0;
+      const nextSr = Number.isFinite(sunriseTomorrowMs) ? sunriseTomorrowMs : (sunriseTodayMs + 24 * 3600 * 1000);
+      if (nowMs < sunriseTodayMs) return DIM_MAX;
+      if (nowMs < sunriseTodayMs + RAMP_MS) return DIM_MAX * (1 - (nowMs - sunriseTodayMs) / RAMP_MS);
+      if (nowMs < sunsetTodayMs) return 0;
+      if (nowMs < sunsetTodayMs + RAMP_MS) return DIM_MAX * ((nowMs - sunsetTodayMs) / RAMP_MS);
+      if (nowMs < nextSr) return DIM_MAX;
+      if (nowMs < nextSr + RAMP_MS) return DIM_MAX * (1 - (nowMs - nextSr) / RAMP_MS);
+      return 0;
+    }
+
+    function parseSunIso(iso) {
+      if (!iso) return NaN;
+      const t = Date.parse(iso);
+      return Number.isFinite(t) ? t : NaN;
+    }
+
+    function isSameLocalDay(iso, now) {
+      if (!iso || !now) return false;
+      const d = new Date(iso);
+      if (Number.isNaN(d.getTime())) return false;
+      return (
+        d.getFullYear() === now.getFullYear() &&
+        d.getMonth() === now.getMonth() &&
+        d.getDate() === now.getDate()
+      );
+    }
+
+    function applyDimOverlay(now) {
+      if (dimDemoActive) return;
+      const el = document.getElementById("dim-overlay");
+      if (!el) return;
+      if (
+        !todaySunriseStr ||
+        !todaySunsetStr ||
+        !isSameLocalDay(todaySunriseStr, now) ||
+        !isSameLocalDay(todaySunsetStr, now)
+      ) {
+        el.style.opacity = "0";
+        return;
+      }
+      const sr = parseSunIso(todaySunriseStr);
+      const ss = parseSunIso(todaySunsetStr);
+      const sr2 = parseSunIso(tomorrowSunriseStr);
+      el.style.opacity = String(dimOpacity(now.getTime(), sr, ss, sr2));
+    }
+
+    function demoOpacity(progress01) {
+      const p = Math.max(0, Math.min(1, progress01));
+      if (p < 0.12) return 0;
+      if (p < 0.38) return DIM_MAX * ((p - 0.12) / 0.26);
+      if (p < 0.62) return DIM_MAX;
+      if (p < 0.88) return DIM_MAX * (1 - (p - 0.62) / 0.26);
+      return 0;
+    }
+
+    function stopDimDemo() {
+      dimDemoActive = false;
+      if (dimDemoTimer) {
+        clearTimeout(dimDemoTimer);
+        dimDemoTimer = null;
+      }
+      if (dimDemoRaf) {
+        cancelAnimationFrame(dimDemoRaf);
+        dimDemoRaf = null;
+      }
+      const btn = document.getElementById("btn-dim-test");
+      if (btn) btn.classList.remove("busy");
+      applyDimOverlay(new Date());
+    }
+
+    function startDimDemo() {
+      if (dimDemoActive) {
+        stopDimDemo();
+        return;
+      }
+      dimDemoActive = true;
+      const btn = document.getElementById("btn-dim-test");
+      if (btn) btn.classList.add("busy");
+      const el = document.getElementById("dim-overlay");
+      const t0 = Date.now();
+      function frame() {
+        if (!dimDemoActive) return;
+        const p = (Date.now() - t0) / DIM_DEMO_MS;
+        if (el) el.style.opacity = String(demoOpacity(p));
+        if (p >= 1) {
+          stopDimDemo();
+          return;
+        }
+        dimDemoRaf = requestAnimationFrame(frame);
+      }
+      dimDemoRaf = requestAnimationFrame(frame);
+      dimDemoTimer = setTimeout(function () {
+        stopDimDemo();
+      }, DIM_DEMO_MS + 50);
     }
 
     async function fetchJson(url) {
@@ -695,6 +818,9 @@
       const tmax = d.temperature_2m_max && d.temperature_2m_max[0];
       const tmin = d.temperature_2m_min && d.temperature_2m_min[0];
       const popMax = d.precipitation_probability_max && d.precipitation_probability_max[0];
+      todaySunriseStr = d.sunrise && d.sunrise[0] ? d.sunrise[0] : null;
+      todaySunsetStr = d.sunset && d.sunset[0] ? d.sunset[0] : null;
+      tomorrowSunriseStr = d.sunrise && d.sunrise[1] ? d.sunrise[1] : null;
 
       document.getElementById("city").textContent = currentLocation.place;
       document.getElementById("icon").textContent = meta[1];
@@ -714,6 +840,7 @@
       renderMini(data.hourly || null);
 
       document.getElementById("updated").textContent = fmtUpdated(new Date());
+      applyDimOverlay(new Date());
     }
 
     function saveLastWeather(data) {
@@ -748,7 +875,7 @@
         + "?latitude=" + currentLocation.lat
         + "&longitude=" + currentLocation.lon
         + "&current=temperature_2m,apparent_temperature,relative_humidity_2m,precipitation,precipitation_probability,weather_code"
-        + "&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max"
+        + "&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset"
         + "&hourly=temperature_2m,weather_code,precipitation_probability"
         + "&forecast_days=2"
         + "&timezone=auto";
@@ -810,6 +937,7 @@
     }
 
     document.getElementById("refresh").addEventListener("click", loadWeather);
+    document.getElementById("btn-dim-test").addEventListener("click", startDimDemo);
     document.getElementById("locate").addEventListener("click", async () => {
       clearManualCityStorage();
       await relocalize(true);

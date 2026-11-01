@@ -1,6 +1,6 @@
 # HANDOFF — ClimaDesk
 
-Última sesión: **2026-10-30** (Lite v1.8.1 docs en `main`)
+Última sesión: **2026-11-01** (`main` — atenuación gradual por overlay + botón ◐)
 
 ## Estado
 - **Proyecto:** ClimaDesk (repo [kapi21/ClimaDesk](https://github.com/kapi21/ClimaDesk))
@@ -8,11 +8,27 @@
   1. Rama **`tablet-galaxy-tab2-color`** → `apks/Climadesk-Color-v1.8.apk` (Galaxy Tab 2 — E-Ink Color)
   2. Rama **`tablet-galaxy-tab2`** → `apks/Climadesk-v1.8.apk` (Galaxy Tab 2 — Monocromo E-Ink)
   3. Rama **`redmi4x-lite`** → `apks/Climadesk-Lite-v1.8.1.apk` (Xiaomi Redmi 4X — Edición Lite 640x360 dp; AMANECER/ATARDECER en columna)
-- **Versión app:** `1.8.1-lite` (`versionCode` 11) en Redmi 4X / `1.8` (`versionCode` 9) en Tablet — package `es.climadesk.app`
+- **Versión app (builds locales, sin commit de código aún):** `1.8.2-lite` (`versionCode` 12) en Redmi 4X / `1.8.1` (`versionCode` 10) en Tablet y `main` — package `es.climadesk.app`
+- **Código de atenuación:** sin commit hasta autorización del usuario — en **`main`**, cambios en el working tree (`index.html`, `build.gradle.kts`); en **`redmi4x-lite`**, **`tablet-galaxy-tab2`** y **`tablet-galaxy-tab2-color`**, mismo código en **git stash** (`sdd-task2-lite-dim-uncommitted`, `sdd-task3-tab-mono-dim-uncommitted`, `sdd-task4-tab-color-dim-uncommitted`). Spec y plan en `docs/superpowers/` (sin commit aún).
 - **GitHub Release oficial:** [v1.8](https://github.com/kapi21/ClimaDesk/releases/tag/v1.8) con los 3 binarios disponibles para descarga directa.
-- **Hoja de ruta activa:** Documentada detalladamente en [ROADMAP.md](file:///c:/@MIS%20PROYECTOS/REDMI4X/ROADMAP.md).
+- **Hoja de ruta activa:** [ROADMAP.md](ROADMAP.md).
 
-## Hecho reciente (Lite v1.8.1)
+## Hecho reciente (2026-11-01 — atenuación nocturna por overlay)
+
+- **Feature:** overlay negro semitransparente (opacidad 0–0.30) con rampas de ~30 min al amanecer/atardecer según Open-Meteo `daily.sunrise` / `daily.sunset`; horarios persisten en el cache del último parte.
+- **Botón test ◐** (esquina superior derecha, junto a 📍 y ↻): simula un ciclo día→noche→día en ~12 s; **segundo toque cancela** y vuelve al modo real.
+- **Ramas tocadas:** `redmi4x-lite`, `tablet-galaxy-tab2`, `tablet-galaxy-tab2-color`, `main` (misma lógica JS; z-index del overlay ajustado por variante).
+- **Documentación:** `docs/superpowers/specs/2026-11-01-sunset-dim-overlay-design.md`, `docs/superpowers/plans/2026-11-01-sunset-dim-overlay.md`.
+- **Fuera de alcance (ROADMAP P2 pendiente):** brillo del sistema Android y sensor de luz ambiental.
+
+### Cómo probar el botón ◐
+
+1. Instala o abre la build con clima cargado (necesita `sunrise`/`sunset` en la respuesta o en cache).
+2. Pulsa **◐** — la pantalla debe atenuar y aclarar en ~12 s (demo acelerada).
+3. Pulsa **◐** otra vez durante la demo — debe cancelar y aplicar la opacidad real según la hora y el sol.
+4. Sin datos solares (primer arranque sin red): overlay en opacidad 0.
+
+## Hecho anterior (Lite v1.8.1, 2026-10-30)
 
 - **Redmi 4X Lite:** layout solar vertical — AMANECER y ATARDECER apilados en columna (rama `redmi4x-lite`, binario local `apks/Climadesk-Lite-v1.8.1.apk`, `versionCode` 11).
 

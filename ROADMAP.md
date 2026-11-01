@@ -30,7 +30,8 @@ Hoja de ruta del proyecto **ClimaDesk**, organizada por dispositivos, funcionali
 - [ ] **Modo Solo-Reloj**:
   - Opción en menú de ajustes para ocultar paneles meteorológicos y maximizar el reloj.
 - [ ] **Ajuste fino de brillo / Sensor de luz**:
-  - Atenuación automática nocturna para no molestar en dormitorios o mesas de noche.
+  - ✅ **Overlay por amanecer/atardecer** (Open-Meteo, rampas ~30 min, botón test ◐) — implementado en working tree y stashes (variantes dispositivo); **pendiente** commit unificado y APK/release; spec `docs/superpowers/specs/2026-11-01-sunset-dim-overlay-design.md`.
+  - ⏳ **Pendiente:** brillo del sistema Android y sensor de luz ambiental (sin cambios Java en la entrega del overlay).
 
 ### Prioridad 3 (P3) — Mantenimiento e Infraestructura
 - [ ] **Keystore de producción Android**:

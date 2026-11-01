@@ -28,6 +28,7 @@
     }
 
     :root {
+      --night: 0;
       --bg: #eceae3;
       --card-bg: #fdfdfc;
       --tile-bg: #faf8f2;
@@ -1079,68 +1080,61 @@
     var themeMode = "auto"; // "auto" | "day" | "night"
     var todaySunriseStr = null;
     var todaySunsetStr = null;
-    var RAMP_MS = 30 * 60 * 1000;
-    var DIM_MAX = 0.30;
+    // Atenuación estilo WebClima: elevación solar → --night (0..1) → overlay * 0.45
+    var NIGHT_DIM = 0.45;
     var DIM_DEMO_MS = 12000;
     var dimDemoActive = false;
     var dimDemoTimer = null;
     var dimDemoRaf = null;
-    var tomorrowSunriseStr = null;
+    var autoSolarDim = true;
 
-    function dimOpacity(nowMs, sunriseTodayMs, sunsetTodayMs, sunriseTomorrowMs) {
-      if (!Number.isFinite(sunriseTodayMs) || !Number.isFinite(sunsetTodayMs)) return 0;
-      var nextSr = Number.isFinite(sunriseTomorrowMs) ? sunriseTomorrowMs : (sunriseTodayMs + 24 * 3600 * 1000);
-      if (nowMs < sunriseTodayMs) return DIM_MAX;
-      if (nowMs < sunriseTodayMs + RAMP_MS) return DIM_MAX * (1 - (nowMs - sunriseTodayMs) / RAMP_MS);
-      if (nowMs < sunsetTodayMs) return 0;
-      if (nowMs < sunsetTodayMs + RAMP_MS) return DIM_MAX * ((nowMs - sunsetTodayMs) / RAMP_MS);
-      if (nowMs < nextSr) return DIM_MAX;
-      if (nowMs < nextSr + RAMP_MS) return DIM_MAX * (1 - (nowMs - nextSr) / RAMP_MS);
-      return 0;
+    function sunElevation(date, lat, lon) {
+      var rad = Math.PI / 180;
+      var dayMs = 86400000;
+      var J1970 = 2440588;
+      var J2000 = 2451545;
+      var d = date.valueOf() / dayMs - 0.5 + J1970 - J2000;
+      var M = rad * (357.5291 + 0.98560028 * d);
+      var C = rad * (1.9148 * Math.sin(M) + 0.02 * Math.sin(2 * M) + 0.0003 * Math.sin(3 * M));
+      var L = M + C + rad * 102.9372 + Math.PI;
+      var e = rad * 23.4397;
+      var dec = Math.asin(Math.sin(e) * Math.sin(L));
+      var ra = Math.atan2(Math.sin(L) * Math.cos(e), Math.cos(L));
+      var H = rad * (280.16 + 360.9856235 * d) + rad * lon - ra;
+      var phi = rad * lat;
+      return Math.asin(Math.sin(phi) * Math.sin(dec) + Math.cos(phi) * Math.cos(dec) * Math.cos(H)) / rad;
     }
 
-    function parseSunIso(iso) {
-      if (!iso) return NaN;
-      var t = Date.parse(iso);
-      return Number.isFinite(t) ? t : NaN;
+    function nightFromElevation(elev) {
+      // ≥ +2° día; ≤ -8° noche; transición lineal (como WebClima)
+      return Math.max(0, Math.min(1, (2 - elev) / 10));
     }
 
-    function isSameLocalDay(iso, now) {
-      if (!iso || !now) return false;
-      var d = new Date(iso);
-      if (Number.isNaN(d.getTime())) return false;
-      return (
-        d.getFullYear() === now.getFullYear() &&
-        d.getMonth() === now.getMonth() &&
-        d.getDate() === now.getDate()
-      );
+    function setNightLevel(n) {
+      n = Math.max(0, Math.min(1, n));
+      document.documentElement.style.setProperty('--night', n.toFixed(3));
+      var el = document.getElementById('dim-overlay');
+      if (el) el.style.opacity = String(n * NIGHT_DIM);
     }
 
     function applyDimOverlay(now) {
-      if (dimDemoActive) return;
+      if (dimDemoActive || !autoSolarDim) return;
       var el = document.getElementById('dim-overlay');
       if (!el) return;
-      if (
-        !todaySunriseStr ||
-        !todaySunsetStr ||
-        !isSameLocalDay(todaySunriseStr, now) ||
-        !isSameLocalDay(todaySunsetStr, now)
-      ) {
-        el.style.opacity = '0';
+      var lat = currentCity && Number(currentCity.lat);
+      var lon = currentCity && Number(currentCity.lon);
+      if (!isFinite(lat) || !isFinite(lon)) {
+        setNightLevel(0);
         return;
       }
-      var sr = parseSunIso(todaySunriseStr);
-      var ss = parseSunIso(todaySunsetStr);
-      var sr2 = parseSunIso(tomorrowSunriseStr);
-      el.style.opacity = String(dimOpacity(now.getTime(), sr, ss, sr2));
+      setNightLevel(nightFromElevation(sunElevation(now, lat, lon)));
     }
 
-    function demoOpacity(progress01) {
+    function demoNight(progress01) {
       var p = Math.max(0, Math.min(1, progress01));
-      // Immediate evening ramp (no dead lead-in): dusk → night → dawn → day
-      if (p < 0.30) return DIM_MAX * (p / 0.30);
-      if (p < 0.50) return DIM_MAX;
-      if (p < 0.85) return DIM_MAX * (1 - (p - 0.50) / 0.35);
+      if (p < 0.30) return p / 0.30;
+      if (p < 0.50) return 1;
+      if (p < 0.85) return 1 - (p - 0.50) / 0.35;
       return 0;
     }
 
@@ -1168,11 +1162,11 @@
         if (!dimDemoActive) return;
         var p = (Date.now() - t0) / DIM_DEMO_MS;
         if (p >= 1) {
-          el.style.opacity = '0';
+          setNightLevel(0);
           stopDimDemo();
           return;
         }
-        el.style.opacity = String(demoOpacity(p));
+        setNightLevel(demoNight(p));
       }
       tickDemo();
       dimDemoTimer = setInterval(tickDemo, 50);
@@ -1454,11 +1448,6 @@
         if (elSr) elSr.textContent = sr;
       } else {
         todaySunriseStr = null;
-      }
-      if (d.sunrise && d.sunrise[2]) {
-        tomorrowSunriseStr = d.sunrise[2];
-      } else {
-        tomorrowSunriseStr = null;
       }
       if (d.sunset && d.sunset[1]) {
         todaySunsetStr = d.sunset[1];

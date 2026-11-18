@@ -16,11 +16,13 @@ Pensado para dejarlo apoyado en la mesa, cargando, y echarle un vistazo de un go
 
 ## 📥 Descargas y APKs Listas
 
-Descárgalas directamente en tu dispositivo desde [**GitHub Releases (v1.8)**](https://github.com/kapi21/ClimaDesk/releases/tag/v1.8) o encuéntralas en la carpeta local [`apks/`](apks/):
+Descárgalas directamente en tu dispositivo desde [**GitHub Releases (v1.8.3)**](https://github.com/kapi21/ClimaDesk/releases/tag/v1.8.3) o encuéntralas en la carpeta local [`apks/`](apks/):
 
-- 🎨 [**Climadesk-Color-v1.8.apk**](https://github.com/kapi21/ClimaDesk/releases/download/v1.8/Climadesk-Color-v1.8.apk): Galaxy Tab 2 (E-Ink Color — fondo blanco roto, sol, lluvia y temperatura a color).
-- 📜 [**Climadesk-v1.8.apk**](https://github.com/kapi21/ClimaDesk/releases/download/v1.8/Climadesk-v1.8.apk): Galaxy Tab 2 (E-Ink Monocromo original).
-- 📱 [**Climadesk-Lite-v1.8.apk**](https://github.com/kapi21/ClimaDesk/releases/download/v1.8/Climadesk-Lite-v1.8.apk) (Release v1.8) — **build local más reciente:** [`apks/Climadesk-Lite-v1.8.1.apk`](apks/Climadesk-Lite-v1.8.1.apk): Xiaomi Redmi 4X (Edición Lite 640x360 dp; AMANECER/ATARDECER en columna).
+- 🎨 [**Climadesk-Color-v1.8.2.apk**](https://github.com/kapi21/ClimaDesk/releases/download/v1.8.3/Climadesk-Color-v1.8.2.apk): Galaxy Tab 2 (E-Ink Color — fondo blanco roto, sol, lluvia y temperatura a color).
+- 📜 [**Climadesk-v1.8.2.apk**](https://github.com/kapi21/ClimaDesk/releases/download/v1.8.3/Climadesk-v1.8.2.apk): Galaxy Tab 2 (E-Ink Monocromo original).
+- 📱 [**Climadesk-Lite-v1.8.3.apk**](https://github.com/kapi21/ClimaDesk/releases/download/v1.8.3/Climadesk-Lite-v1.8.3.apk): Xiaomi Redmi 4X (Edición Lite 640x360 dp; AMANECER/ATARDECER en columna).
+
+Versión anterior: [Release v1.8](https://github.com/kapi21/ClimaDesk/releases/tag/v1.8).
 
 ## ¿Para qué sirve?
 

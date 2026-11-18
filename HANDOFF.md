@@ -9,7 +9,7 @@
   2. Rama **`tablet-galaxy-tab2`** → build local `apks/Climadesk-v1.8.2.apk` (Galaxy Tab 2 — Monocromo E-Ink)
   3. Rama **`redmi4x-lite`** → build local `apks/Climadesk-Lite-v1.8.3.apk` (Xiaomi Redmi 4X — Lite)
 - **Versión app (builds locales):** `1.8.3-lite` (`versionCode` 13) en Redmi / `1.8.2` (`versionCode` 11) en Tablet Color/Mono / `1.8.1` (`versionCode` 10) en `main` — package `es.climadesk.app`
-- **GitHub Release oficial:** [v1.8](https://github.com/kapi21/ClimaDesk/releases/tag/v1.8) (binarios v1.8; builds locales más recientes en `apks/`)
+- **GitHub Release oficial:** [v1.8.3](https://github.com/kapi21/ClimaDesk/releases/tag/v1.8.3) (2026-11-18: Color/Mono `1.8.2`, Lite `1.8.3`; anterior [v1.8](https://github.com/kapi21/ClimaDesk/releases/tag/v1.8))
 - **Hoja de ruta:** [ROADMAP.md](ROADMAP.md) — pendiente **revisar claridad de la atenuación solar**
 
 ## Hecho reciente (2026-11-18 — revisión y arreglos)

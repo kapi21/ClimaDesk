@@ -1,6 +1,6 @@
 # HANDOFF — ClimaDesk
 
-Última sesión: **2026-11-18** (revisión de la app + arreglos de caché, hora de sincronización y zona horaria en las 4 ramas)
+Última sesión: **2026-11-18** (revisión de la app, arreglos en las 4 ramas, APK nuevas instaladas y Release v1.8.3)
 
 ## Estado
 - **Proyecto:** ClimaDesk (repo [kapi21/ClimaDesk](https://github.com/kapi21/ClimaDesk))
@@ -19,9 +19,10 @@
   - `redmi4x-lite` `76ab922` → `1.8.3-lite` (13) → `apks/Climadesk-Lite-v1.8.3.apk`
   - `tablet-galaxy-tab2` `b5914c8` → `1.8.2` (11) → `apks/Climadesk-v1.8.2.apk`
   - `tablet-galaxy-tab2-color` `6f6ee79` → `1.8.2` (11) → `apks/Climadesk-Color-v1.8.2.apk`
-- **Instalado:** Galaxy Tab 2 Color `1.8.2` vía `adb install -r` ✅. Redmi: MIUI bloquea `adb install` (`INSTALL_FAILED_USER_RESTRICTED`); APK copiada + instalador abierto y confirmado en el teléfono → `1.8.3-lite` instalada ✅.
+- **Release [v1.8.3](https://github.com/kapi21/ClimaDesk/releases/tag/v1.8.3)** (Latest, desde `main`) con las 3 APK; README/ROADMAP apuntan a ella. Todas las ramas pusheadas.
+- **Instalado:** Galaxy Tab 2 Color `1.8.2` vía `adb install -r` ✅ (la Mono `1.8.2` está compilada pero no instalada). Redmi: MIUI bloquea `adb install` (`INSTALL_FAILED_USER_RESTRICTED`); APK copiada + instalador abierto y confirmado en el teléfono → `1.8.3-lite` instalada ✅.
 - **Nota Git Bash:** usar `MSYS_NO_PATHCONV=1` con `adb push ... /sdcard/...` (si no, convierte la ruta a `C:/Program Files/Git/sdcard`). `gradlew.bat` hay que lanzarlo desde PowerShell (la ruta con espacio rompe Bash).
-- **Sigue pendiente:** claridad de la atenuación solar (el velo no baja la retroiluminación; valorar `screenBrightness` vía puente Java).
+- **Sigue pendiente:** claridad de la atenuación solar (el velo no baja la retroiluminación; valorar `screenBrightness` vía puente Java). `main` sigue en `1.8.1` (no se distribuye como APK). El tema de las ramas compara amanecer/atardecer de la ciudad con la hora del dispositivo (solo falla con ciudades de otro huso).
 
 ## Hecho anterior (2026-11-01 — atenuación solar)
 

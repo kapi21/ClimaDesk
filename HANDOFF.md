@@ -1,18 +1,29 @@
 # HANDOFF — ClimaDesk
 
-Última sesión: **2026-11-01** (`main` — atenuación por elevación solar estilo WebClima; dejar y revisar luego)
+Última sesión: **2026-11-18** (revisión de la app + arreglos de caché, hora de sincronización y zona horaria en las 4 ramas)
 
 ## Estado
 - **Proyecto:** ClimaDesk (repo [kapi21/ClimaDesk](https://github.com/kapi21/ClimaDesk))
 - **Estrategia Multi-Dispositivo:** Tres ramas dedicadas y APKs en GitHub Releases + carpeta `apks/`:
-  1. Rama **`tablet-galaxy-tab2-color`** → build local `apks/Climadesk-Color-v1.8.1.apk` (Galaxy Tab 2 — E-Ink Color)
-  2. Rama **`tablet-galaxy-tab2`** → build local `apks/Climadesk-v1.8.1.apk` (Galaxy Tab 2 — Monocromo E-Ink)
-  3. Rama **`redmi4x-lite`** → build local `apks/Climadesk-Lite-v1.8.2.apk` (Xiaomi Redmi 4X — Lite)
-- **Versión app (builds locales):** `1.8.2-lite` (`versionCode` 12) en Redmi / `1.8.1` (`versionCode` 10) en Tablet Color/Mono y `main` — package `es.climadesk.app`
+  1. Rama **`tablet-galaxy-tab2-color`** → build local `apks/Climadesk-Color-v1.8.2.apk` (Galaxy Tab 2 — E-Ink Color)
+  2. Rama **`tablet-galaxy-tab2`** → build local `apks/Climadesk-v1.8.2.apk` (Galaxy Tab 2 — Monocromo E-Ink)
+  3. Rama **`redmi4x-lite`** → build local `apks/Climadesk-Lite-v1.8.3.apk` (Xiaomi Redmi 4X — Lite)
+- **Versión app (builds locales):** `1.8.3-lite` (`versionCode` 13) en Redmi / `1.8.2` (`versionCode` 11) en Tablet Color/Mono / `1.8.1` (`versionCode` 10) en `main` — package `es.climadesk.app`
 - **GitHub Release oficial:** [v1.8](https://github.com/kapi21/ClimaDesk/releases/tag/v1.8) (binarios v1.8; builds locales más recientes en `apks/`)
 - **Hoja de ruta:** [ROADMAP.md](ROADMAP.md) — pendiente **revisar claridad de la atenuación solar**
 
-## Hecho reciente (2026-11-01 — atenuación solar)
+## Hecho reciente (2026-11-18 — revisión y arreglos)
+
+- **`main` (`2dc4d10`)**: tema claro/oscuro por elevación solar (antes horario fijo 7–20 h); caché sin conexión solo de la ciudad actual; "Act. HH:MM" con la hora real de los datos; previsión por horas con `utc_offset_seconds` de la ciudad.
+- **Ramas de dispositivo** (mismo parche en las 3; su tema ya iba por amanecer/atardecer): caché solo de la ciudad actual (`sameCity`), "Actualizado" con `data.ts`, horas de previsión y "prob. ahora" en la zona horaria de la ciudad (`cityTimeToMs`).
+  - `redmi4x-lite` `76ab922` → `1.8.3-lite` (13) → `apks/Climadesk-Lite-v1.8.3.apk`
+  - `tablet-galaxy-tab2` `b5914c8` → `1.8.2` (11) → `apks/Climadesk-v1.8.2.apk`
+  - `tablet-galaxy-tab2-color` `6f6ee79` → `1.8.2` (11) → `apks/Climadesk-Color-v1.8.2.apk`
+- **Instalado:** Galaxy Tab 2 Color `1.8.2` vía `adb install -r` ✅. Redmi: MIUI bloquea `adb install` (`INSTALL_FAILED_USER_RESTRICTED`); APK copiada + instalador abierto y confirmado en el teléfono → `1.8.3-lite` instalada ✅.
+- **Nota Git Bash:** usar `MSYS_NO_PATHCONV=1` con `adb push ... /sdcard/...` (si no, convierte la ruta a `C:/Program Files/Git/sdcard`). `gradlew.bat` hay que lanzarlo desde PowerShell (la ruta con espacio rompe Bash).
+- **Sigue pendiente:** claridad de la atenuación solar (el velo no baja la retroiluminación; valorar `screenBrightness` vía puente Java).
+
+## Hecho anterior (2026-11-01 — atenuación solar)
 
 - **Modelo actual (estilo WebClima, opción A):** elevación del sol con lat/lon → factor `--night` (0…1) → overlay negro a `night × 0.45`. AUTO siempre activo.
 - **Botón test** (icono SVG mitad/mitad en la barra superior): demo ~12 s día→noche→día; segundo toque cancela.
@@ -50,25 +61,25 @@
 - `kiosk-app/app/src/main/java/es/climadesk/app/MainActivity.java`
 - `kiosk-app/app/build.gradle.kts`
 - `ROADMAP.md`, `docs/superpowers/specs/`, `docs/superpowers/plans/`
-- `apks/Climadesk-Color-v1.8.1.apk`
-- `apks/Climadesk-v1.8.1.apk`
-- `apks/Climadesk-Lite-v1.8.2.apk`
+- `apks/Climadesk-Color-v1.8.2.apk`
+- `apks/Climadesk-v1.8.2.apk`
+- `apks/Climadesk-Lite-v1.8.3.apk`
 
 ## Cómo verificar y desplegar
 
 ### En Redmi 4X (`6f207ef7d440`)
 ```bash
 git checkout redmi4x-lite
-adb -s 6f207ef7d440 push apks/Climadesk-Lite-v1.8.2.apk /sdcard/Download/ClimaDesk-Lite.apk
+adb -s 6f207ef7d440 push apks/Climadesk-Lite-v1.8.3.apk /sdcard/Download/ClimaDesk-Lite.apk
 adb -s 6f207ef7d440 shell "am start -a android.intent.action.VIEW -d 'file:///sdcard/Download/ClimaDesk-Lite.apk' -t 'application/vnd.android.package-archive'"
 ```
 
 ### En Samsung Galaxy Tab 2 (`c32063e15928a6f`)
 ```bash
 # Versión Color (build local reciente):
-adb -s c32063e15928a6f install -r apks/Climadesk-Color-v1.8.1.apk
+adb -s c32063e15928a6f install -r apks/Climadesk-Color-v1.8.2.apk
 # Versión Monocromo:
-adb -s c32063e15928a6f install -r apks/Climadesk-v1.8.1.apk
+adb -s c32063e15928a6f install -r apks/Climadesk-v1.8.2.apk
 ```
 
 ## Dispositivos probados y soporte planificado

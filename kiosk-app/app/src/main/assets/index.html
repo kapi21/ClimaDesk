@@ -1603,11 +1603,13 @@
       var c = forecast.current || {};
       var d = forecast.daily || {};
       var h = forecast.hourly || {};
+      cityUtcOffsetSec = (typeof forecast.utc_offset_seconds === 'number')
+        ? forecast.utc_offset_seconds : null;
 
       document.getElementById('label-city').textContent = currentCity.name;
       var syncEl = document.getElementById('label-sync-text');
       if (syncEl) {
-        var syncDate = new Date();
+        var syncDate = (data && data.ts) ? new Date(data.ts) : new Date();
         var sh = syncDate.getHours();
         var sm = syncDate.getMinutes();
         syncEl.textContent = 'Actualizado ' + (sh < 10 ? '0' : '') + sh + ':' + (sm < 10 ? '0' : '') + sm;
@@ -1712,11 +1714,28 @@
       renderForecast(d);
     }
 
+    // Open-Meteo (timezone=auto) da horas locales de la ciudad sin offset ("2026-11-18T15:00").
+    // Se pasan a instante real con utc_offset_seconds, sin depender de la zona del dispositivo.
+    var cityUtcOffsetSec = null;
+    function cityTimeToMs(iso) {
+      var off = (cityUtcOffsetSec !== null) ? cityUtcOffsetSec : -new Date().getTimezoneOffset() * 60;
+      return Date.parse(String(iso) + ':00Z') - off * 1000;
+    }
+    function cityLocalHourStr(iso) {
+      var m = /T(\d{2})/.exec(String(iso));
+      return m ? m[1] : '--';
+    }
+    function sameCity(a, b) {
+      if (!a || !b) return false;
+      return Math.abs(Number(a.lat) - Number(b.lat)) < 0.05
+        && Math.abs(Number(a.lon) - Number(b.lon)) < 0.05; // ~5 km
+    }
+
     function getHourlyPopNow(h) {
       if (!h || !h.time || !h.precipitation_probability) return 0;
       var nowTime = Date.now();
       for (var i = 0; i < h.time.length; i++) {
-        if (new Date(h.time[i]).getTime() >= nowTime) {
+        if (cityTimeToMs(h.time[i]) >= nowTime) {
           return h.precipitation_probability[i] || 0;
         }
       }
@@ -1730,7 +1749,7 @@
       var nowTime = Date.now();
       var startIndex = 0;
       for (var i = 0; i < h.time.length; i++) {
-        if (new Date(h.time[i]).getTime() >= nowTime) {
+        if (cityTimeToMs(h.time[i]) >= nowTime) {
           startIndex = i;
           break;
         }
@@ -1739,8 +1758,7 @@
       box.innerHTML = '';
       for (var k = 1; k <= 4; k++) {
         var idx = Math.min(startIndex + (k * 2), h.time.length - 1);
-        var tObj = new Date(h.time[idx]);
-        var hourStr = (tObj.getHours() < 10 ? '0' : '') + tObj.getHours() + ':00';
+        var hourStr = cityLocalHourStr(h.time[idx]) + ':00';
         var tVal = Math.round(h.temperature_2m[idx]);
         var code = h.weather_code ? h.weather_code[idx] : 0;
         var iconHtml = (WMO_SPANISH[code] && WMO_SPANISH[code][1]) ? WMO_SPANISH[code][1] : SVG_ICONS.sun;
@@ -1819,7 +1837,8 @@
         if (cached) {
           try {
             var parsed = JSON.parse(cached);
-            if (parsed && parsed.data) {
+            // No pintar el clima de otra ciudad bajo el nombre de la actual
+            if (parsed && parsed.data && sameCity(parsed.city, currentCity)) {
               renderDashboard(parsed.data);
             }
           } catch (_) {}

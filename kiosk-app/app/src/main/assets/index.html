@@ -442,8 +442,6 @@
     let currentLocation = { ...DEFAULT_LOCATION };
     let citySearchSeq = 0;
     let citySearchTimer = null;
-    let todaySunriseStr = null;
-    let todaySunsetStr = null;
     // Atenuacion estilo WebClima: elevacion solar -> --night (0..1) -> overlay * 0.45
     const NIGHT_DIM = 0.45;
     const DIM_DEMO_MS = 12000;
@@ -500,14 +498,24 @@
       localStorage.setItem(STORAGE_SCALE_KEY, String(safe));
     }
 
-    function applyThemeByHour() {
-      const h = new Date().getHours();
-      document.body.classList.toggle("day", h >= 7 && h < 20);
+    // Tema claro mientras el sol este por encima de ~-3 deg (mitad de la rampa de --night);
+    // sin coordenadas validas, se cae a horario fijo 7-20.
+    function applyThemeBySun(now) {
+      const lat = currentLocation && Number(currentLocation.lat);
+      const lon = currentLocation && Number(currentLocation.lon);
+      let isDay;
+      if (isFinite(lat) && isFinite(lon)) {
+        isDay = nightFromElevation(sunElevation(now, lat, lon)) < 0.5;
+      } else {
+        const h = now.getHours();
+        isDay = h >= 7 && h < 20;
+      }
+      document.body.classList.toggle("day", isDay);
     }
 
     function tick() {
       const now = new Date();
-      applyThemeByHour();
+      applyThemeBySun(now);
       document.getElementById("time").innerHTML =
         pad(now.getHours()) + ":" + pad(now.getMinutes()) + '<span class="secs">' + pad(now.getSeconds()) + "</span>";
       document.getElementById("date").textContent =
@@ -784,16 +792,28 @@
       }
     }
 
-    function renderMini(hourly) {
+    // Open-Meteo (timezone=auto) devuelve horas locales de la ciudad sin offset ("2026-11-18T15:00").
+    // Se convierten a instante real con utc_offset_seconds para no depender de la zona del dispositivo.
+    function cityLocalToMs(iso, offsetSec) {
+      return Date.parse(String(iso) + ":00Z") - offsetSec * 1000;
+    }
+
+    function cityLocalHour(iso) {
+      const m = /T(\d{2})/.exec(String(iso));
+      return m ? m[1] : "--";
+    }
+
+    function renderMini(hourly, offsetSec) {
       const host = document.getElementById("mini");
       if (!hourly || !hourly.time || !hourly.temperature_2m || !hourly.weather_code) {
         host.innerHTML = '<div class="mini-item">--</div><div class="mini-item">--</div><div class="mini-item">--</div><div class="mini-item">--</div>';
         return;
       }
+      const off = Number.isFinite(offsetSec) ? offsetSec : -new Date().getTimezoneOffset() * 60;
       const now = Date.now();
       let start = 0;
       for (let i = 0; i < hourly.time.length; i++) {
-        if (new Date(hourly.time[i]).getTime() >= now) {
+        if (cityLocalToMs(hourly.time[i], off) >= now) {
           start = i;
           break;
         }
@@ -801,12 +821,11 @@
       const picks = [];
       for (let j = 1; j <= 4; j++) {
         const idx = Math.min(start + j * 3, hourly.time.length - 1);
-        const t = new Date(hourly.time[idx]);
         const code = hourly.weather_code[idx];
         const meta = WMO[code] || ["", "🌡️"];
         picks.push(
           '<div class="mini-item">'
-          + '<div class="mini-hour">' + pad(t.getHours()) + ':00</div>'
+          + '<div class="mini-hour">' + cityLocalHour(hourly.time[idx]) + ':00</div>'
           + '<div class="mini-icon">' + meta[1] + '</div>'
           + '<div class="mini-temp">' + Math.round(hourly.temperature_2m[idx]) + '°</div>'
           + '</div>'
@@ -815,7 +834,7 @@
       host.innerHTML = picks.join("");
     }
 
-    function renderWeather(data, stale) {
+    function renderWeather(data, stale, dataTs) {
       const c = data.current || {};
       const d = data.daily || {};
       const code = c.weather_code;
@@ -823,8 +842,6 @@
       const tmax = d.temperature_2m_max && d.temperature_2m_max[0];
       const tmin = d.temperature_2m_min && d.temperature_2m_min[0];
       const popMax = d.precipitation_probability_max && d.precipitation_probability_max[0];
-      todaySunriseStr = d.sunrise && d.sunrise[0] ? d.sunrise[0] : null;
-      todaySunsetStr = d.sunset && d.sunset[0] ? d.sunset[0] : null;
 
       document.getElementById("city").textContent = currentLocation.place;
       document.getElementById("icon").textContent = meta[1];
@@ -841,9 +858,11 @@
         (popMax != null ? Math.round(popMax) : "--") + "%";
       document.getElementById("precip").textContent =
         (c.precipitation != null ? Number(c.precipitation).toFixed(1) : "--") + " mm";
-      renderMini(data.hourly || null);
+      renderMini(data.hourly || null, Number(data.utc_offset_seconds));
 
-      document.getElementById("updated").textContent = fmtUpdated(new Date());
+      // Con datos de cache se muestra la hora en que se guardaron, no la actual
+      const updatedAt = (stale && Number.isFinite(dataTs)) ? new Date(dataTs) : new Date();
+      document.getElementById("updated").textContent = fmtUpdated(updatedAt);
       applyDimOverlay(new Date());
     }
 
@@ -855,14 +874,22 @@
       }));
     }
 
+    function sameLocation(a, b) {
+      if (!a || !b) return false;
+      const dLat = Math.abs(Number(a.lat) - Number(b.lat));
+      const dLon = Math.abs(Number(a.lon) - Number(b.lon));
+      return dLat < 0.05 && dLon < 0.05; // ~5 km
+    }
+
     function restoreLastWeather() {
       const raw = localStorage.getItem(STORAGE_WEATHER_KEY);
       if (!raw) return false;
       try {
         const payload = JSON.parse(raw);
         if (!payload || !payload.weather) return false;
-        if (payload.location) currentLocation = payload.location;
-        renderWeather(payload.weather, true);
+        // Solo vale la cache de la ubicacion actual: no pisar la ciudad recien elegida
+        if (!sameLocation(payload.location, currentLocation)) return false;
+        renderWeather(payload.weather, true, Number(payload.ts));
         return true;
       } catch (_) {
         return false;

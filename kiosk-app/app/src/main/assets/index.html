@@ -1612,7 +1612,7 @@
         var syncDate = (data && data.ts) ? new Date(data.ts) : new Date();
         var sh = syncDate.getHours();
         var sm = syncDate.getMinutes();
-        syncEl.textContent = 'Actualizado ' + (sh < 10 ? '0' : '') + sh + ':' + (sm < 10 ? '0' : '') + sm;
+        syncEl.textContent = (data && data.stale ? 'Sin conexión · datos de ' : 'Actualizado ') + (sh < 10 ? '0' : '') + sh + ':' + (sm < 10 ? '0' : '') + sm;
       }
 
       var code = (c.weather_code !== undefined && c.weather_code !== null) ? c.weather_code : 0;
@@ -1825,25 +1825,49 @@
       }
     }
 
+    var retryTimer = null;
+    var retryCount = 0;
+    var RETRY_DELAYS_MS = [30000, 60000, 120000, 300000];
+
+    function scheduleRetry() {
+      if (retryTimer) return;
+      var delay = RETRY_DELAYS_MS[Math.min(retryCount, RETRY_DELAYS_MS.length - 1)];
+      retryCount++;
+      retryTimer = setTimeout(function() {
+        retryTimer = null;
+        loadData();
+      }, delay);
+    }
+
     function loadData() {
       fetchWeather(currentCity.lat, currentCity.lon).then(function(data) {
+        retryCount = 0;
+        if (retryTimer) { clearTimeout(retryTimer); retryTimer = null; }
         renderDashboard(data);
         localStorage.setItem(STORAGE_KEY_LAST_WEATHER, JSON.stringify({
           city: currentCity,
           data: data
         }));
       }).catch(function() {
+        scheduleRetry();
         var cached = localStorage.getItem(STORAGE_KEY_LAST_WEATHER);
         if (cached) {
           try {
             var parsed = JSON.parse(cached);
             // No pintar el clima de otra ciudad bajo el nombre de la actual
             if (parsed && parsed.data && sameCity(parsed.city, currentCity)) {
+              parsed.data.stale = true;
               renderDashboard(parsed.data);
             }
           } catch (_) {}
         }
       });
+    }
+
+    var refreshTimer = null;
+    function startRefreshTimer() {
+      if (refreshTimer) clearInterval(refreshTimer);
+      refreshTimer = setInterval(loadData, REFRESH_INTERVAL_MS);
     }
 
     /* --- AUTO-LOCALIZACIÓN (GPS o IP) --- */
@@ -1983,6 +2007,7 @@
         intervalBtns[j].addEventListener('click', function() {
           var mins = parseInt(this.getAttribute('data-interval'), 10);
           REFRESH_INTERVAL_MS = mins * 60 * 1000;
+          startRefreshTimer();
           localStorage.setItem(STORAGE_KEY_INTERVAL, String(mins));
           syncSettingsUI();
         });
@@ -2024,6 +2049,7 @@
           themeMode = 'auto';
           updateTheme();
           REFRESH_INTERVAL_MS = 20 * 60 * 1000;
+          startRefreshTimer();
           syncSettingsUI();
         });
       }
@@ -2112,7 +2138,7 @@
       }
 
       loadData();
-      setInterval(loadData, REFRESH_INTERVAL_MS);
+      startRefreshTimer();
     }
 
     window.addEventListener('DOMContentLoaded', init);

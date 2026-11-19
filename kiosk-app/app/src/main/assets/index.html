@@ -896,6 +896,19 @@
       }
     }
 
+    let weatherRetryTimer = null;
+    let weatherRetryCount = 0;
+    const WEATHER_RETRY_MS = [30000, 60000, 120000, 300000];
+    function scheduleWeatherRetry() {
+      if (weatherRetryTimer) return;
+      const delay = WEATHER_RETRY_MS[Math.min(weatherRetryCount, WEATHER_RETRY_MS.length - 1)];
+      weatherRetryCount++;
+      weatherRetryTimer = setTimeout(function () {
+        weatherRetryTimer = null;
+        loadWeather();
+      }, delay);
+    }
+
     async function loadWeather() {
       const err = document.getElementById("err");
       const btn = document.getElementById("refresh");
@@ -914,7 +927,10 @@
         const data = await fetchJson(url);
         renderWeather(data, false);
         saveLastWeather(data);
+        weatherRetryCount = 0;
+        if (weatherRetryTimer) { clearTimeout(weatherRetryTimer); weatherRetryTimer = null; }
       } catch (_) {
+        scheduleWeatherRetry();
         const restored = restoreLastWeather();
         err.textContent = restored ? "Sin internet · mostrando ultimo dato guardado" : "Sin clima · revisa Wi-Fi";
       } finally {

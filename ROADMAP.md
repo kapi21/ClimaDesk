@@ -8,8 +8,8 @@ Hoja de ruta del proyecto **ClimaDesk**, organizada por dispositivos, funcionali
 
 | Plataforma / Dispositivo | Estado | Detalles técnicos |
 |---|---|---|
-| **Samsung Galaxy Tab 2** (Android 6.0) | ✅ Completado (v1.8.2) | APK dedicado Monocromo y Color E-Ink (`c32063e15928a6f`) |
-| **Xiaomi Redmi 4X** (Android 7.1.2) | ✅ Completado (v1.8.3) | APK dedicado Lite 640x360 dp (`6f207ef7d440`) |
+| **Samsung Galaxy Tab 2** (Android 6.0) | ✅ Completado (v1.8.3 local; Release v1.8.3 trae 1.8.2) | APK dedicado Monocromo y Color E-Ink (`c32063e15928a6f`) |
+| **Xiaomi Redmi 4X** (Android 7.1.2) | ✅ Completado (v1.8.4-lite local) | APK dedicado Lite 640x360 dp (`6f207ef7d440`) |
 | **Apple iPhone XS** (iOS 17+) | 📋 En backlog / Planificado | PWA a pantalla completa vía Safari + Acceso Guiado |
 | **Raspberry Pi 3B / Pi 400** | 💡 Propuesta futura | Modo Kiosk en Chromium sobre Raspberry Pi OS |
 
@@ -34,6 +34,10 @@ Hoja de ruta del proyecto **ClimaDesk**, organizada por dispositivos, funcionali
   - 🔍 **Revisar claridad visual de la atenuación** — feedback 2026-11-01: el efecto no se percibe con claridad; **dejar como está** por ahora y retomar (curva, máximo 0.45, E-Ink vs LCD, demo).
   - ⏳ **Pendiente:** brillo del sistema Android y sensor de luz ambiental (sin cambios Java en la entrega del overlay).
 
+### Mantenimiento pendiente (2026-11-19)
+- [ ] Probar la APK Mono 1.8.3 en su dispositivo y confirmar el refresco en el Redmi (1.8.4-lite).
+- [ ] Publicar Release v1.8.4 con las APK con el arreglo de red y actualizar enlaces del README.
+
 ### Prioridad 3 (P3) — Mantenimiento e Infraestructura
 - [ ] **Keystore de producción Android**:
   - Creación de `.jks` para firmar APKs de release oficiales sin depender de claves de debug.
@@ -44,6 +48,7 @@ Hoja de ruta del proyecto **ClimaDesk**, organizada por dispositivos, funcionali
 
 ## 📦 Historial de Versiones
 
+- **Local 2026-11-19** (sin Release): fix de sincronización — User-Agent propio, reintentos con backoff, aviso «Sin conexión», intervalo en vivo (Tab Color/Mono `1.8.3`, Lite `1.8.4-lite`; `main` solo reintentos).
 - **v1.8.3** (2026-11-18): Release con atenuación solar y arreglos de caché sin conexión, hora de actualización y zona horaria (Tab Color/Mono `1.8.2`, Lite `1.8.3`).
 - **v1.8** (2026-10-02): Lanzamiento oficial multi-dispositivo con 3 binarios en GitHub Releases (Galaxy Tab 2 Color, Tab 2 Mono y Redmi 4X Lite).
 - **v1.0 - v1.7**: Prototipos iterativos de kiosk Android, geolocalización Open-Meteo y diseño E-Ink.

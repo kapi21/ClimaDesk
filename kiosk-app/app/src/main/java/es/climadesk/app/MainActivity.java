@@ -54,6 +54,8 @@ public class MainActivity extends Activity {
                     ((HttpsURLConnection) conn).setHostnameVerifier((hostname, session) -> true);
                 }
                 conn.setRequestMethod("GET");
+                conn.setRequestProperty("User-Agent", "ClimaDesk/1.8.3 (Android kiosk)");
+                conn.setRequestProperty("Accept", "application/json");
                 conn.setConnectTimeout(12000);
                 conn.setReadTimeout(12000);
                 BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
